@@ -83,7 +83,7 @@ export default function Navbar() {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Link
-              href="/training"
+              href="/community"
               className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg font-semibold shadow-md transition duration-300"
             >
               Apply Now
