@@ -9,8 +9,13 @@ import "swiper/css/pagination";
 
 export default function HeroSlider() {
   const images = [
-    "/images/smart-agri-dashboard.jpg",
-    "/images/water-monitoring.png",
+    "/images/A_futuristic_innovation_lab.jpg",
+	"/images/Young_engineering_students.jpg",
+	"/images/Smart_irrigation_system.jpg",
+	"/images/A_smart_water_tank_monitoring_system.jpg",
+    "/images/Embedded_systems_engineering_workspace.jpg",
+	"/images/Modern_IoT_ecosystem.jpg",
+	"/images/Artificial_intelligence_and_automation.jpg",
   ];
 
   return (

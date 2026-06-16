@@ -12,7 +12,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0B3D2E] text-gray-300 mt-20">
+    <footer className="bg-[#0B3D2E] text-gray-300 mt-0.5">
 
       {/* Brand Section */}
       <div className="max-w-7xl mx-auto px-6 pt-16">

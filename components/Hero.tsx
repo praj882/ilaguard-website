@@ -7,7 +7,7 @@ export default function Hero() {
 
         <div className="max-w-7xl mx-auto px-6 py-20">
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
 
             {/* Left Side */}
             <div>
@@ -21,14 +21,12 @@ export default function Hero() {
               </h1>
 
               <p className="text-2xl text-green-100 mt-6">
-                Technology for Farmers, Opportunities for Engineers
+                Engineering the Future of Smart Agriculture
               </p>
 
               <p className="text-lg text-gray-200 mt-6 max-w-xl">
-                Empowering farmers with smart irrigation,
-                water monitoring, IoT automation, and
-                embedded technologies while creating
-                hands-on opportunities for future engineers.
+                Our mission is to build AI-powered Embedded Systems and IoT solutions that empower farmers to improve productivity, 
+				conserve water, and embrace precision agriculture while creating opportunities for future engineers.
               </p>
 
               <div className="flex flex-wrap gap-4 mt-8">
@@ -46,9 +44,7 @@ export default function Hero() {
 
             {/* Right Side */}
             <div className="relative">
-
               <HeroSlider />
-
             </div>
 
           </div>
@@ -57,44 +53,91 @@ export default function Hero() {
           <div className="grid md:grid-cols-4 gap-6 mt-20">
 
             <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="text-4xl mb-3">🌱</div>
-              <h3 className="font-bold text-lg">
-                Smart Irrigation
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Automated watering based on soil conditions.
-              </p>
-            </div>
+			  <div className="text-4xl mb-4">🌱</div>
+
+			  <h3 className="text-2xl font-bold">
+				Smart Irrigation System
+			  </h3>
+
+			  <p className="text-sm font-semibold text-green-600 mt-2">
+				🟢 Prototype Developed
+			  </p>
+
+			  <p className="mt-4 text-gray-600">
+				AI & IoT-powered irrigation that automatically monitors soil moisture
+				and controls watering to conserve water and improve crop productivity.
+			  </p>
+
+			  <button className="mt-6 text-green-700 font-semibold hover:underline">
+				Learn More →
+			  </button>
+			</div>
 
             <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="text-4xl mb-3">💧</div>
-              <h3 className="font-bold text-lg">
-                Water Monitoring
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Real-time tank level monitoring and alerts.
-              </p>
-            </div>
+			  <div className="text-4xl mb-4">💧</div>
+
+			  <h3 className="text-2xl font-bold">
+				Water Tank Monitoring
+			  </h3>
+
+			  <p className="text-sm font-semibold text-green-600 mt-2">
+				🟢 Prototype Developed
+			  </p>
+
+			  <p className="mt-4 text-gray-600">
+				IoT-enabled water tank monitoring that measures water levels in
+				real time, provides instant alerts, and automates pump control to
+				ensure efficient water management.
+			  </p>
+
+			  <button className="mt-6 text-green-700 font-semibold hover:underline">
+				Learn More →
+			  </button>
+			</div>
 
             <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="text-4xl mb-3">📡</div>
-              <h3 className="font-bold text-lg">
-                IoT Solutions
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Smart connected agriculture systems.
-              </p>
-            </div>
+			  <div className="text-4xl mb-4">📡</div>
+
+			  <h3 className="text-2xl font-bold">
+				IoT Solutions
+			  </h3>
+
+			  <p className="text-sm font-semibold text-amber-600 mt-2">
+				🟡 In Development
+			  </p>
+
+			  <p className="mt-4 text-gray-600">
+				Intelligent IoT solutions that connect sensors, devices, and cloud
+				platforms to enable real-time monitoring, automation, and
+				data-driven decision making.
+			  </p>
+
+			  <button className="mt-6 text-green-700 font-semibold hover:underline">
+				Learn More →
+			  </button>
+			</div>
 
             <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="text-4xl mb-3">⚙️</div>
-              <h3 className="font-bold text-lg">
-                Farm Automation
-              </h3>
-              <p className="text-gray-600 mt-2">
-                Reduce manual effort through automation.
-              </p>
-            </div>
+			  <div className="text-4xl mb-4">⚙️</div>
+
+			  <h3 className="text-2xl font-bold">
+				Farm Automation
+			  </h3>
+
+			  <p className="text-sm font-semibold text-amber-600 mt-2">
+				🟡 In Development
+			  </p>
+
+			  <p className="mt-4 text-gray-600">
+				AI and IoT-powered automation designed to reduce manual effort,
+				improve operational efficiency, and streamline agricultural
+				processes through intelligent control systems.
+			  </p>
+
+			  <button className="mt-6 text-green-700 font-semibold hover:underline">
+				Learn More →
+			  </button>
+			</div>
 
           </div>
 
