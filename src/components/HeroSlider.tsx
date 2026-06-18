@@ -8,7 +8,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 export default function HeroSlider() {
-
   const images = [
     "/images/A_futuristic_innovation_lab.jpg",
     "/images/Young_engineering_students.jpg",
@@ -20,36 +19,26 @@ export default function HeroSlider() {
   ];
 
   return (
-
     <Swiper
       modules={[Autoplay, Pagination]}
-      autoplay={{
-        delay: 3500,
-        disableOnInteraction: false,
-      }}
+      autoplay={{ delay: 3500, disableOnInteraction: false }}
       pagination={{ clickable: true }}
       loop
-      className="rounded-3xl overflow-hidden shadow-2xl"
+      className="w-full rounded-3xl overflow-hidden shadow-2xl"
     >
-
       {images.map((image, index) => (
-
         <SwiperSlide key={index}>
-
-          <Image
-            src={image}
-            alt={`Slide ${index + 1}`}
-            width={700}
-            height={500}
-            priority={index === 0}
-            className="w-full h-72 md:h-96 lg:h-[500px] object-cover"
-          />
-
+          <div className="relative w-full h-72 md:h-96 lg:h-[500px]">
+            <Image
+              src={image}
+              alt={`Slide ${index + 1}`}
+              fill
+              priority={index === 0}
+              className="object-cover"
+            />
+          </div>
         </SwiperSlide>
-
       ))}
-
     </Swiper>
-
   );
 }
