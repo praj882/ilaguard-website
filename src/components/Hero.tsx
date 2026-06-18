@@ -48,7 +48,13 @@ export default function Hero() {
 
             {/* Right Side */}
             <div className="relative">
-              <HeroSlider />
+              <div className="rounded-3xl overflow-hidden shadow-2xl">
+				  <img
+					src="/images/A_futuristic_innovation_lab.jpg"
+					alt="Hero"
+					className="w-full h-64 md:h-96 lg:h-[500px] object-cover"
+				  />
+				</div>
             </div>
 
           </div>
