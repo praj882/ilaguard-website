@@ -47,9 +47,9 @@ export default function Hero() {
             </div>
 
             {/* Right Side */}
-            <div className="relative">
-               <HeroSlider />
-            </div>
+            <section className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
+			  <HeroSlider />
+			</section>
 
           </div>
 

@@ -48,9 +48,13 @@ img {
 /* ============================= */
 
 .swiper {
-  touch-action: pan-y;
+  touch-action: pan-x;
 }
 
 .swiper-slide {
   user-select: none;
+}
+
+.swiper-wrapper {
+  height: 100%;
 }
