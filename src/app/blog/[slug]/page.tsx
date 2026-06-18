@@ -2,6 +2,8 @@ import { blogs } from "@/app/lib/blogs";
 import { blogContent } from "@/content/blogs";
 import { notFound } from "next/navigation";
 
+type BlogSlug = keyof typeof blogContent;
+
 export default async function BlogDetails({
   params,
 }: {
@@ -15,7 +17,7 @@ export default async function BlogDetails({
     notFound();
   }
 
-  const content = blogContent?.[slug]?.content;
+  const content = blogContent[slug as BlogSlug]?.content;
 
   return (
     <main className="max-w-4xl mx-auto p-6">
