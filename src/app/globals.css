@@ -42,19 +42,3 @@ img {
   max-width: 100%;
   height: auto;
 }
-
-/* ============================= */
-/* Swiper Mobile Fix (IMPORTANT) */
-/* ============================= */
-
-.swiper {
-  touch-action: pan-x;
-}
-
-.swiper-slide {
-  user-select: none;
-}
-
-.swiper-wrapper {
-  height: 100%;
-}
