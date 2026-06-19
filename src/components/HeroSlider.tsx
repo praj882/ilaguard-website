@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -19,26 +19,30 @@ export default function HeroSlider() {
   ];
 
   return (
-    <Swiper
-      modules={[Autoplay, Pagination]}
-      autoplay={{ delay: 3500, disableOnInteraction: false }}
-      pagination={{ clickable: true }}
-      loop
-      className="w-full rounded-3xl overflow-hidden shadow-2xl"
-    >
-      {images.map((image, index) => (
-        <SwiperSlide key={index}>
-          <div className="relative w-full h-72 md:h-96 lg:h-[500px]">
+    <div className="w-full">
+      <Swiper
+        modules={[Pagination, Autoplay]}
+        pagination={{ clickable: true }}
+        autoplay={{
+          delay: 3500,
+          disableOnInteraction: false,
+        }}
+        loop={false}
+      >
+        {images.map((image, index) => (
+          <SwiperSlide key={index}>
             <Image
               src={image}
               alt={`Slide ${index + 1}`}
-              fill
+              width={1920}
+              height={1080}
+              sizes="100vw"
               priority={index === 0}
-              className="object-cover"
+              className="w-full h-72 md:h-96 lg:h-[500px] object-cover"
             />
-          </div>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 }
