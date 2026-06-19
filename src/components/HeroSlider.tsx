@@ -7,15 +7,19 @@ export default function HeroSlider() {
   return (
     <Swiper>
       <SwiperSlide>
-        <div className="h-72 bg-red-500">
-          Slide 1
-        </div>
+        <img
+          src="/images/A_futuristic_innovation_lab.jpg"
+          alt="Slide 1"
+          className="w-full h-72 object-cover"
+        />
       </SwiperSlide>
 
       <SwiperSlide>
-        <div className="h-72 bg-green-500">
-          Slide 2
-        </div>
+        <img
+          src="/images/Young_engineering_students.jpg"
+          alt="Slide 2"
+          className="w-full h-72 object-cover"
+        />
       </SwiperSlide>
     </Swiper>
   );
