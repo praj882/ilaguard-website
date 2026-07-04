@@ -1,3 +1,13 @@
+import {
+  FaLinkedin,
+  FaYoutube,
+  FaInstagram,
+  FaFacebook,
+  FaXTwitter,
+  FaEnvelope,
+  FaPhone,
+  FaLocationDot,
+} from "react-icons/fa6";
 export default function CommunityHero() {
   return (
     <section className="bg-gradient-to-r from-green-900 to-green-700 text-white">
@@ -21,7 +31,20 @@ export default function CommunityHero() {
         </p>
 
         <div className="mt-12 flex flex-wrap justify-center gap-4">
-
+          <a 
+			href="https://www.youtube.com/@ilaguardlabs/community"
+			target="_blank" 
+			rel="noopener noreferrer" 
+			className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-xl font-semibold transition">
+			<span>YouTube Community</span>
+		  </a>
+		  <a 
+			href="https://www.facebook.com/groups/ilaguardlabscommunity"
+			target="_blank" 
+			rel="noopener noreferrer" 
+			className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-xl font-semibold transition">
+			<span>Facebook Community</span>
+		  </a>
           <a
             href="#join"
             className="bg-orange-500 hover:bg-orange-600 px-8 py-4 rounded-xl font-semibold transition"
