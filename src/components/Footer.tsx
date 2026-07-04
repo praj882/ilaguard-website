@@ -171,25 +171,41 @@ export default function Footer() {
 
             <div className="space-y-5">
 
-              <div className="flex items-center gap-4 hover:text-orange-400 transition cursor-pointer">
-                <FaLinkedin className="text-orange-500 text-lg" />
-                <span>LinkedIn</span>
-              </div>
+              <a 
+				href="https://www.linkedin.com/company/ilaguard-labs" 
+				target="_blank" 
+				rel="noopener noreferrer" 
+				className="flex items-center gap-4 text-inherit hover:text-orange-400 transition cursor-pointer no-underline">
+				<FaLinkedin className="text-blue-700 text-lg" />
+				<span>LinkedIn</span>
+			  </a>
 
-              <div className="flex items-center gap-4 hover:text-orange-400 transition cursor-pointer">
-                <FaYoutube className="text-orange-500 text-lg" />
-                <span>YouTube</span>
-              </div>
+              <a 
+				href="https://www.youtube.com/@ilaguardlabs" 
+				target="_blank" 
+				rel="noopener noreferrer" 
+				className="flex items-center gap-4 text-inherit hover:text-orange-400 transition cursor-pointer no-underline">
+				<FaYoutube className="text-red-600 text-lg" />
+				<span>YouTube</span>
+			  </a>
 
-              <div className="flex items-center gap-4 hover:text-orange-400 transition cursor-pointer">
-                <FaInstagram className="text-orange-500 text-lg" />
-                <span>Instagram</span>
-              </div>
+              <a 
+				href="https://www.instagram.com/ilaguardlabs/" 
+				target="_blank" 
+				rel="noopener noreferrer" 
+				className="flex items-center gap-4 text-inherit hover:text-orange-400 transition cursor-pointer no-underline">
+				<FaInstagram className="text-orange-500 text-lg" />
+				<span>Instagram</span>
+			  </a>
 
-              <div className="flex items-center gap-4 hover:text-orange-400 transition cursor-pointer">
-                <FaFacebook className="text-orange-500 text-lg" />
-                <span>Facebook</span>
-              </div>
+              <a 
+				href="https://www.facebook.com/ilaguardlabs/" 
+				target="_blank" 
+				rel="noopener noreferrer" 
+				className="flex items-center gap-4 text-inherit hover:text-orange-400 transition cursor-pointer no-underline">
+				<FaFacebook className="text-blue-600 text-lg" />
+				<span>Facebook</span>
+			  </a>
 
               <div className="flex items-center gap-4 hover:text-orange-400 transition cursor-pointer">
                 <FaXTwitter className="text-orange-500 text-lg" />
