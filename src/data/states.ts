@@ -1,4 +1,4 @@
-import { Location } from "../data/location";
+import { State } from "../data/location";
 
 export const STATES: State[] = [
   {
