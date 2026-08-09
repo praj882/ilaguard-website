@@ -64,11 +64,11 @@ export const blogs = [
   },
   {
   id: 8,
-  slug: "Use-of-AI-in-smart-farming",
-  title: "Use of AI in Smart Farming: The Future of Agriculture",
+  slug: "AI-in-smart-farming",
+  title: "Use of AI in Smart Farming: The Future of Agriculture (2026 Guide) | IlaGuard Labs",
   category: "Agriculture",
   date: "August 2026",
   description:
-    "Learn how IoT, sensors, and automation are transforming modern agriculture.",
+    "Discover how Artificial Intelligence is transforming modern agriculture through smart farming. Learn about AI-powered crop disease detection, precision irrigation, yield prediction, drones, and sustainable farming.",
   },
 ];

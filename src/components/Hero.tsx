@@ -1,25 +1,20 @@
 import Image from "next/image";
 import HeroSlider from "@/components/HeroSlider";
+import CropAdvisorCard from "@/components/CropAdvisorCard";
 export default function Hero() {
   return (
     <main>
       <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-700 min-h-screen flex items-center">
 
-        <div className="max-w-7xl mx-auto px-6 py-20">
+		  <div className="max-w-7xl mx-auto px-6 py-2">
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-10 items-start">
 
             {/* Left Side */}
+			
             <div>
-
-              <span className="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                Agri-Tech & Embedded Innovation
-              </span>
-
-              <h1 className="text-5xl lg:text-7xl font-bold text-white mt-6 leading-tight">
-                Building Intelligent Solutions for Agriculture
-              </h1>
-
+              <CropAdvisorCard />
+			
               <p className="text-2xl text-green-100 mt-6">
                 Engineering the Future of Smart Agriculture
               </p>
@@ -30,8 +25,6 @@ export default function Hero() {
               </p>
 
               <div className="flex flex-wrap gap-4 mt-8">
-
-             
 				<a
 				  href="solutions"
 				  className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition"
@@ -45,7 +38,7 @@ export default function Hero() {
 
               </div>
             </div>
-
+            
             {/* Right Side */}
             <section className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px]">
 			  <HeroSlider />
