@@ -1,4 +1,4 @@
-import { District } from "@/types/location";
+import { Location } from "../data/location";
 
 export const DISTRICTS: District[] = [
   { id: 1, stateId: 1, name: "Araria" },

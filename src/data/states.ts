@@ -1,4 +1,4 @@
-import { State } from "@/types/location";
+import { Location } from "../data/location";
 
 export const STATES: State[] = [
   {
