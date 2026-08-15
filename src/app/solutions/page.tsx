@@ -52,7 +52,7 @@ export default function SolutionsPage() {
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition">
               <Image
                 src="/images/Water_Tank_Monitoring.jpg"
-                alt="Water Tank Monitoring"
+                alt="Smart Water Management"
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
@@ -60,7 +60,7 @@ export default function SolutionsPage() {
 
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-green-800 mb-3">
-                  Water Tank Monitoring
+                  Smart Water Management
                 </h3>
 
                 <p className="text-gray-600">
@@ -74,7 +74,7 @@ export default function SolutionsPage() {
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition">
               <Image
                 src="/images/Modern_IoT_ecosystem.jpg"
-                alt="IoT Agriculture"
+                alt="Connected Farming"
                 width={500}
                 height={300}
                 className="w-full h-56 object-cover"
@@ -82,7 +82,7 @@ export default function SolutionsPage() {
 
               <div className="p-6">
                 <h3 className="text-2xl font-bold text-green-800 mb-3">
-                  IoT Agriculture
+                  Connected Farming
                 </h3>
 
                 <p className="text-gray-600">
