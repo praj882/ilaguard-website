@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const TO_EMAIL = "feedback@ilaguard.com";
 
 export async function POST(request: Request) {
@@ -40,13 +39,20 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!process.env.RESEND_API_KEY) {
+    const apiKey = process.env.RESEND_API_KEY;
+
+    if (!apiKey) {
       console.error("RESEND_API_KEY is not configured.");
       return NextResponse.json(
         { success: false, error: "Feedback service is not configured." },
         { status: 500 }
       );
     }
+
+    // Initialize Resend at request time rather than module evaluation time.
+    // This prevents the Next.js build from failing when the environment
+    // variable is unavailable during static build/collection.
+    const resend = new Resend(apiKey);
 
     const { error } = await resend.emails.send({
       from: "IlaGuard Website <onboarding@resend.dev>",
