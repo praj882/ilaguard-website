@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
-
+export const runtime = "nodejs";
 const TO_EMAIL = "feedback@ilaguard.com";
 
 export async function POST(request: Request) {
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     const resend = new Resend(apiKey);
 
     const { error } = await resend.emails.send({
-      from: "IlaGuard Website <onboarding@resend.dev>",
+      from: "IlaGuard Website <feedback@ilaguard.com>",
       to: [TO_EMAIL],
       replyTo: email || undefined,
       subject: `IlaGuard Website Feedback — ${rating}`,
