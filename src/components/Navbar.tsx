@@ -12,77 +12,86 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const [cropAdvisorOpen, setCropAdvisorOpen] =
+    useState(false);
 
   const closeMenus = () => {
     setMenuOpen(false);
     setProductsOpen(false);
     setSolutionsOpen(false);
+    setCropAdvisorOpen(false);
   };
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="mx-auto max-w-7xl px-6">
 
-        <div className="flex items-center justify-between h-20">
+        <div className="flex h-20 items-center justify-between">
 
-          {/* =========================
+          {/* =====================================================
               LOGO
-          ========================== */}
+          ====================================================== */}
 
           <div>
             <Link href="/" onClick={closeMenus}>
-              <h1 className="text-3xl font-bold text-green-800 cursor-pointer">
+              <h1 className="cursor-pointer text-3xl font-bold text-green-800">
                 IlaGuard Labs
               </h1>
             </Link>
 
-            <p className="hidden md:block text-sm text-gray-600">
+            <p className="hidden text-sm text-gray-600 md:block">
               Technology for Farmers, Opportunities for Engineers
             </p>
           </div>
 
 
-          {/* =========================
+          {/* =====================================================
               DESKTOP NAVIGATION
-          ========================== */}
+          ====================================================== */}
 
-          <nav className="hidden lg:flex items-center gap-7 font-medium">
+          <nav className="hidden items-center gap-7 font-medium lg:flex">
 
-            {/* Home */}
+            {/* =================================================
+                HOME
+            ================================================== */}
 
             <Link
               href="/"
-              className="hover:text-green-700 transition"
+              onClick={closeMenus}
+              className="transition hover:text-green-700"
             >
               Home
             </Link>
 
 
-            {/* =========================
+            {/* =================================================
                 PRODUCTS DROPDOWN
-            ========================== */}
+            ================================================== */}
 
             <div className="relative">
 
               <button
+                type="button"
                 onClick={() => {
                   setProductsOpen(!productsOpen);
                   setSolutionsOpen(false);
+                  setCropAdvisorOpen(false);
                 }}
-                className="flex items-center gap-2 hover:text-green-700 transition"
+                className="flex items-center gap-2 transition hover:text-green-700"
               >
                 Products
 
                 <FaChevronDown
                   className={`text-xs transition-transform ${
-                    productsOpen ? "rotate-180" : ""
+                    productsOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
               </button>
 
 
               {productsOpen && (
-
                 <div className="absolute left-1/2 top-full mt-4 w-[620px] -translate-x-1/2 rounded-2xl border border-gray-100 bg-white p-5 shadow-2xl">
 
                   <div className="mb-4">
@@ -92,7 +101,8 @@ export default function Navbar() {
                     </p>
 
                     <p className="mt-1 text-sm text-gray-500">
-                      Smart technology for agriculture and resource management.
+                      Smart technology for agriculture and
+                      resource management.
                     </p>
 
                   </div>
@@ -105,7 +115,7 @@ export default function Navbar() {
                     <Link
                       href="/products/ilapot"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="flex items-start gap-3">
@@ -140,7 +150,7 @@ export default function Navbar() {
                     <Link
                       href="/products/ilafarm"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="flex items-start gap-3">
@@ -175,7 +185,7 @@ export default function Navbar() {
                     <Link
                       href="/products/ilatank"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="flex items-start gap-3">
@@ -210,10 +220,10 @@ export default function Navbar() {
                     <Link
                       href="/products"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
-                      <div className="flex items-center gap-3 h-full">
+                      <div className="flex h-full items-center gap-3">
 
                         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-xl">
                           →
@@ -238,37 +248,39 @@ export default function Navbar() {
                   </div>
 
                 </div>
-
               )}
 
             </div>
 
 
-            {/* =========================
+            {/* =================================================
                 SOLUTIONS DROPDOWN
-            ========================== */}
+            ================================================== */}
 
             <div className="relative">
 
               <button
+                type="button"
                 onClick={() => {
                   setSolutionsOpen(!solutionsOpen);
                   setProductsOpen(false);
+                  setCropAdvisorOpen(false);
                 }}
-                className="flex items-center gap-2 hover:text-green-700 transition"
+                className="flex items-center gap-2 transition hover:text-green-700"
               >
                 Solutions
 
                 <FaChevronDown
                   className={`text-xs transition-transform ${
-                    solutionsOpen ? "rotate-180" : ""
+                    solutionsOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
               </button>
 
 
               {solutionsOpen && (
-
                 <div className="absolute left-1/2 top-full mt-4 w-[520px] -translate-x-1/2 rounded-2xl border border-gray-100 bg-white p-5 shadow-2xl">
 
                   <div className="mb-4">
@@ -278,7 +290,8 @@ export default function Navbar() {
                     </p>
 
                     <p className="mt-1 text-sm text-gray-500">
-                      Technology designed to solve real agricultural challenges.
+                      Technology designed to solve real
+                      agricultural challenges.
                     </p>
 
                   </div>
@@ -289,7 +302,7 @@ export default function Navbar() {
                     <Link
                       href="/solutions/smart-irrigation"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="text-2xl">
@@ -301,7 +314,8 @@ export default function Navbar() {
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        Optimize irrigation using real-time soil data.
+                        Optimize irrigation using real-time
+                        soil data.
                       </p>
 
                     </Link>
@@ -310,7 +324,7 @@ export default function Navbar() {
                     <Link
                       href="/solutions/connected-farming"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="text-2xl">
@@ -322,7 +336,8 @@ export default function Navbar() {
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        Connected sensors and cloud-based farm analytics.
+                        Connected sensors and cloud-based
+                        farm analytics.
                       </p>
 
                     </Link>
@@ -331,7 +346,7 @@ export default function Navbar() {
                     <Link
                       href="/solutions/water-management"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="text-2xl">
@@ -343,7 +358,8 @@ export default function Navbar() {
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        Monitor and manage agricultural water resources.
+                        Monitor and manage agricultural
+                        water resources.
                       </p>
 
                     </Link>
@@ -352,7 +368,7 @@ export default function Navbar() {
                     <Link
                       href="/solutions/farm-automation"
                       onClick={closeMenus}
-                      className="group rounded-xl p-4 hover:bg-green-50 transition"
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
 
                       <div className="text-2xl">
@@ -364,7 +380,8 @@ export default function Navbar() {
                       </h3>
 
                       <p className="mt-1 text-sm text-gray-500">
-                        Automate agricultural operations using IoT.
+                        Automate agricultural operations
+                        using IoT.
                       </p>
 
                     </Link>
@@ -385,69 +402,318 @@ export default function Navbar() {
                   </div>
 
                 </div>
+              )}
+
+            </div>
+
+
+            {/* =================================================
+                CROP ADVISOR DROPDOWN
+            ================================================== */}
+
+            <div className="relative">
+
+              <button
+                type="button"
+                onClick={() => {
+                  setCropAdvisorOpen(
+                    !cropAdvisorOpen
+                  );
+                  setProductsOpen(false);
+                  setSolutionsOpen(false);
+                }}
+                className="flex items-center gap-2 transition hover:text-green-700"
+              >
+                Crop Advisor
+
+                <FaChevronDown
+                  className={`text-xs transition-transform ${
+                    cropAdvisorOpen
+                      ? "rotate-180"
+                      : ""
+                  }`}
+                />
+
+              </button>
+
+
+              {cropAdvisorOpen && (
+
+                <div className="absolute left-1/2 top-full mt-4 w-[620px] -translate-x-1/2 rounded-2xl border border-gray-100 bg-white p-5 shadow-2xl">
+
+                  {/* Header */}
+
+                  <div className="mb-4">
+
+                    <p className="text-xs font-semibold uppercase tracking-wider text-green-700">
+                      IlaGuard Crop Advisor
+                    </p>
+
+                    <p className="mt-1 text-sm text-gray-500">
+                      Smart tools to help farmers make
+                      better crop and market decisions.
+                    </p>
+
+                  </div>
+
+
+                  {/* Advisor Options */}
+
+                  <div className="grid grid-cols-2 gap-3">
+
+                    {/* =================================================
+                        BEST CROP
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/best-crop"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-100 text-2xl">
+                          🌾
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Find Your Best Crop
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Find suitable crops based on
+                            your location and farming month.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+
+                    {/* =================================================
+                        MANDI PRICE
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/mandi-price"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-2xl">
+                          💰
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Find Best Mandi Price
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Check current mandi prices before
+                            selling your crop.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+
+                    {/* =================================================
+                        CROP VARIETY
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/crop-variety"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-100 text-2xl">
+                          🌱
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Find Best Crop Variety
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Discover suitable varieties for
+                            your crop and season.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+
+                    {/* =================================================
+                        SOIL REPORT
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/soil-report"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-2xl">
+                          📄
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Analyze Soil Report
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Use soil-test information to improve
+                            crop recommendations.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+
+                    {/* =================================================
+                        DEVICE
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/device"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-100 text-2xl">
+                          📡
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Use My Device
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Use IlaGuard sensor data for
+                            smarter recommendations.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+                  </div>
+
+
+                  {/* Footer */}
+
+                  <div className="mt-4 border-t pt-4">
+
+                    <Link
+                      href="/crop-advisor"
+                      onClick={closeMenus}
+                      className="text-sm font-semibold text-green-700 hover:text-green-800"
+                    >
+                      Explore All Crop Advisor Tools →
+                    </Link>
+
+                  </div>
+
+                </div>
 
               )}
 
             </div>
 
 
-            {/* =========================
-                CROP ADVISOR
-            ========================== */}
-
-            <Link
-              href="/#crop-advisor"
-              className="hover:text-green-700 transition"
-            >
-              Crop Advisor
-            </Link>
-
-
-            {/* Training */}
+            {/* =================================================
+                TRAINING
+            ================================================== */}
 
             <Link
               href="/training"
-              className="hover:text-green-700 transition"
+              onClick={closeMenus}
+              className="transition hover:text-green-700"
             >
               Training
             </Link>
 
 
-            {/* Blog */}
+            {/* =================================================
+                BLOG
+            ================================================== */}
 
             <Link
               href="/blog"
-              className="hover:text-green-700 transition"
+              onClick={closeMenus}
+              className="transition hover:text-green-700"
             >
               Blog
             </Link>
 
 
-            {/* Careers */}
+            {/* =================================================
+                CAREERS
+            ================================================== */}
 
             <Link
               href="/careers"
-              className="hover:text-green-700 transition"
+              onClick={closeMenus}
+              className="transition hover:text-green-700"
             >
               Careers
             </Link>
 
 
-            {/* Contact */}
+            {/* =================================================
+                CONTACT
+            ================================================== */}
 
             <Link
               href="/contact"
-              className="hover:text-green-700 transition"
+              onClick={closeMenus}
+              className="transition hover:text-green-700"
             >
               Contact
             </Link>
 
 
-            {/* Community */}
+            {/* =================================================
+                COMMUNITY
+            ================================================== */}
 
             <Link
               href="/community"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg transition"
+              onClick={closeMenus}
+              className="rounded-lg bg-orange-500 px-5 py-3 text-white transition hover:bg-orange-600"
             >
               Join Community
             </Link>
@@ -455,31 +721,37 @@ export default function Navbar() {
           </nav>
 
 
-          {/* =========================
+          {/* =====================================================
               MOBILE MENU BUTTON
-          ========================== */}
+          ====================================================== */}
 
           <button
-            className="lg:hidden text-2xl text-gray-800"
-            onClick={() => setMenuOpen(!menuOpen)}
+            type="button"
+            className="text-2xl text-gray-800 lg:hidden"
+            onClick={() =>
+              setMenuOpen(!menuOpen)
+            }
             aria-label="Toggle navigation menu"
           >
-            {menuOpen ? <FaTimes /> : <FaBars />}
+            {menuOpen ? (
+              <FaTimes />
+            ) : (
+              <FaBars />
+            )}
           </button>
 
         </div>
 
 
-        {/* =========================
+        {/* =====================================================
             MOBILE MENU
-        ========================== */}
+        ====================================================== */}
 
         {menuOpen && (
 
-          <div className="lg:hidden pb-6">
+          <div className="pb-6 lg:hidden">
 
             <div className="flex flex-col gap-2 font-medium">
-
 
               {/* Home */}
 
@@ -492,19 +764,24 @@ export default function Navbar() {
               </Link>
 
 
-              {/* =========================
+              {/* =================================================
                   MOBILE PRODUCTS
-              ========================== */}
+              ================================================== */}
 
               <button
-                onClick={() => setProductsOpen(!productsOpen)}
+                type="button"
+                onClick={() =>
+                  setProductsOpen(!productsOpen)
+                }
                 className="flex items-center justify-between py-3 text-left"
               >
                 Products
 
                 <FaChevronDown
                   className={`text-xs transition-transform ${
-                    productsOpen ? "rotate-180" : ""
+                    productsOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
               </button>
@@ -551,19 +828,24 @@ export default function Navbar() {
               )}
 
 
-              {/* =========================
+              {/* =================================================
                   MOBILE SOLUTIONS
-              ========================== */}
+              ================================================== */}
 
               <button
-                onClick={() => setSolutionsOpen(!solutionsOpen)}
+                type="button"
+                onClick={() =>
+                  setSolutionsOpen(!solutionsOpen)
+                }
                 className="flex items-center justify-between py-3 text-left"
               >
                 Solutions
 
                 <FaChevronDown
                   className={`text-xs transition-transform ${
-                    solutionsOpen ? "rotate-180" : ""
+                    solutionsOpen
+                      ? "rotate-180"
+                      : ""
                   }`}
                 />
               </button>
@@ -618,15 +900,87 @@ export default function Navbar() {
               )}
 
 
-              {/* Crop Advisor */}
+              {/* =================================================
+                  MOBILE CROP ADVISOR
+              ================================================== */}
 
-              <Link
-                href="/crop-advisor"
-                onClick={closeMenus}
-                className="py-3"
+              <button
+                type="button"
+                onClick={() =>
+                  setCropAdvisorOpen(
+                    !cropAdvisorOpen
+                  )
+                }
+                className="flex items-center justify-between py-3 text-left"
               >
                 🌾 Crop Advisor
-              </Link>
+
+                <FaChevronDown
+                  className={`text-xs transition-transform ${
+                    cropAdvisorOpen
+                      ? "rotate-180"
+                      : ""
+                  }`}
+                />
+
+              </button>
+
+
+              {cropAdvisorOpen && (
+
+                <div className="ml-4 border-l-2 border-green-100 pl-4">
+
+                  <Link
+                    href="/crop-advisor"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    🌾 Find Your Best Crop
+                  </Link>
+
+                  <Link
+                    href="/crop-advisor/mandi-price"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    💰 Find Best Mandi Price
+                  </Link>
+
+                  <Link
+                    href="/crop-advisor/variety"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    🌱 Find Best Crop Variety
+                  </Link>
+
+                  <Link
+                    href="/crop-advisor/soil-report"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    📄 Analyze Soil Report
+                  </Link>
+
+                  <Link
+                    href="/crop-advisor/device"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    📡 Use My Device
+                  </Link>
+
+                  <Link
+                    href="/crop-advisor"
+                    onClick={closeMenus}
+                    className="block py-2 text-green-700"
+                  >
+                    Explore All Tools →
+                  </Link>
+
+                </div>
+
+              )}
 
 
               {/* Training */}
@@ -678,7 +1032,7 @@ export default function Navbar() {
               <Link
                 href="/community"
                 onClick={closeMenus}
-                className="mt-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-3 rounded-lg text-center transition"
+                className="mt-2 rounded-lg bg-orange-500 px-5 py-3 text-center text-white transition hover:bg-orange-600"
               >
                 Join Community
               </Link>

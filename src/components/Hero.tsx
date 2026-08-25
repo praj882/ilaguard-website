@@ -1,6 +1,6 @@
 import Link from "next/link";
 import HeroSlider from "@/components/HeroSlider";
-import CropAdvisorCard from "@/components/CropAdvisorCard";
+import FarmDecisionHub from "@/components/ui/FarmDecisionHub";
 
 export default function Hero() {
   return (
@@ -42,9 +42,10 @@ export default function Hero() {
                 </Link>
 
                 <a
-				 href="#crop-advisor"
-                 className="rounded-xl border border-green-400 px-7 py-4 font-semibold hover:bg-green-900 transition">
-                 🌾 Find Your Best Crop
+                  href="#crop-advisor"
+                  className="rounded-xl border border-green-400 px-7 py-4 font-semibold hover:bg-green-900 transition"
+                >
+                  🌾 Find Your Best Crop
                 </a>
 
               </div>
@@ -74,9 +75,11 @@ export default function Hero() {
       {/* =====================================================
           CROP ADVISOR
       ====================================================== */}
-	  <section
-		id="crop-advisor"
-		className="bg-gradient-to-b from-green-50 to-white scroll-mt-0">
+
+      <section
+        id="crop-advisor"
+        className="bg-gradient-to-b from-green-50 to-white scroll-mt-0"
+      >
 
         <div className="max-w-7xl mx-auto px-6 py-20 lg:py-20">
 
@@ -100,89 +103,13 @@ export default function Hero() {
           </div>
 
 
-          {/* MAIN CONTENT */}
+          {/* =================================================
+              CROP ADVISOR CARD
+          ================================================== */}
 
-          <div className="mt-14 grid lg:grid-cols-5 gap-15 items-center">
+          <div className="mt-14 w-full">
 
-            {/* LEFT INFORMATION */}
-
-            <div className="lg:col-span-2">
-
-              <div className="rounded-3xl bg-green-900 p-8 lg:p-10 text-white shadow-xl">
-
-                <div className="text-4xl">
-                  🌱
-                </div>
-
-                <h3 className="mt-5 text-2xl font-bold">
-                  Smarter Crop Decisions
-                </h3>
-
-                <p className="mt-4 text-green-100 leading-relaxed">
-                  IlaGuard Crop Advisor helps farmers identify suitable
-                  crops based on local conditions and available farm data.
-                </p>
-
-
-                {/* FEATURES */}
-
-                <div className="mt-8 space-y-4">
-
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-700">
-                      ✓
-                    </span>
-
-                    <span>
-                      Location & District
-                    </span>
-                  </div>
-
-
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-700">
-                      ✓
-                    </span>
-
-                    <span>
-                      Season & Month
-                    </span>
-                  </div>
-
-
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-700">
-                      ✓
-                    </span>
-
-                    <span>
-                      IoT Sensor Data
-                    </span>
-                  </div>
-
-                </div>
-
-
-                <div className="mt-8 border-t border-green-700 pt-6">
-
-                  <p className="text-sm text-green-200">
-                    Built for data-driven agriculture
-                  </p>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            {/* RIGHT — CROP ADVISOR CARD */}
-
-            <div className="lg:col-span-3">
-
-              <CropAdvisorCard />
-
-            </div>
+            <FarmDecisionHub />
 
           </div>
 

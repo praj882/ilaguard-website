@@ -1,12 +1,12 @@
 export interface State {
-  id: number;
-  code: string;
+  id: string;       // 2-character ID: "01", "02", etc.
+  code: string;     // State code: "BR", "KA", etc.
   name: string;
   supported: boolean;
 }
 
 export interface District {
-  id: number;
-  stateId: number;
+  id: string;       // 2-character ID: "01", "02", etc.
+  stateId: string;  // 2-character State ID
   name: string;
 }
