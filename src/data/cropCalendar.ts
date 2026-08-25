@@ -1,22 +1,50 @@
 // src/data/cropCalendar.ts
 
-export type CropPriority = 1 | 2 | 3;
+export type CropCalendarScore = 0 | 25 | 50 | 75 | 100;
 
 export type SowingWindow = {
+  /**
+   * State + District combinations.
+   *
+   * Format:
+   * "SS:DD"
+   *
+   * Example:
+   * "01:05" = Bihar + Begusarai
+   * "01:30" = Bihar + Samastipur
+   *
+   * An empty array means all districts
+   * within the specified state.
+   */
+  regionCodes: string[];
+
   startMonth: number;
   endMonth: number;
-  priority: CropPriority;
+
+  /**
+   * Suitability score for this sowing window.
+   *
+   * 100 = Highly suitable
+   * 75  = Suitable
+   * 50  = Conditional
+   * 25  = Poor
+   * 0   = Not recommended
+   */
+  score: CropCalendarScore;
 };
 
 export type CropCalendar = {
   cropId: string;
 
   /**
-   * State-specific calendar.
-   * For now:
-   * 1 = Bihar
+   * State ID.
+   *
+   * Format:
+   * "01" = Bihar
+   * "02" = Uttar Pradesh
+   * etc.
    */
-  stateId: number;
+  stateId: string;
 
   sowingWindows: SowingWindow[];
 };
@@ -24,10 +52,24 @@ export type CropCalendar = {
 /**
  * Crop sowing calendar
  *
- * Priority:
- * 1 = Highly suitable / preferred window
- * 2 = Suitable / secondary window
- * 3 = Conditional / limited window
+ * Score:
+ * 100 = Highly suitable / preferred window
+ * 75  = Suitable / secondary window
+ * 50  = Conditional / limited window
+ * 25  = Poor suitability
+ * 0   = Not recommended
+ *
+ * Region code:
+ * "SS:DD"
+ *
+ * Example:
+ * "01:05" = Bihar + Begusarai
+ * "01:09" = Bihar + Darbhanga
+ * "01:30" = Bihar + Samastipur
+ *
+ * If regionCodes is []:
+ * the rule applies to all districts
+ * within the specified state.
  */
 export const CROP_CALENDAR: CropCalendar[] = [
   // ============================================================
@@ -35,37 +77,54 @@ export const CROP_CALENDAR: CropCalendar[] = [
   // ============================================================
   {
     cropId: "brinjal",
-    stateId: 1,
+    stateId: "01",
 
     sowingWindows: [
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 2,
         endMonth: 3,
-        priority: 1,
+        score: 100,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 6,
         endMonth: 7,
-        priority: 1,
+        score: 100,
       },
 
+      // Bihar - Selected districts
       {
+        regionCodes: [
+          "01:05", // Begusarai
+          "01:09", // Darbhanga
+          "01:23", // Muzaffarpur
+          "01:26", // Patna
+          "01:30", // Samastipur
+          "01:37", // Vaishali
+        ],
         startMonth: 8,
         endMonth: 10,
-        priority: 2,
+        score: 75,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 11,
         endMonth: 12,
-        priority: 2,
+        score: 75,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 1,
         endMonth: 1,
-        priority: 3,
+        score: 50,
       },
     ],
   },
@@ -75,25 +134,31 @@ export const CROP_CALENDAR: CropCalendar[] = [
   // ============================================================
   {
     cropId: "okra",
-    stateId: 1,
+    stateId: "01",
 
     sowingWindows: [
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 2,
         endMonth: 7,
-        priority: 1,
+        score: 100,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 1,
         endMonth: 1,
-        priority: 3,
+        score: 50,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 12,
         endMonth: 12,
-        priority: 3,
+        score: 50,
       },
     ],
   },
@@ -103,31 +168,39 @@ export const CROP_CALENDAR: CropCalendar[] = [
   // ============================================================
   {
     cropId: "tomato",
-    stateId: 1,
+    stateId: "01",
 
     sowingWindows: [
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 9,
         endMonth: 10,
-        priority: 1,
+        score: 100,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 11,
         endMonth: 12,
-        priority: 2,
+        score: 75,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 2,
         endMonth: 3,
-        priority: 2,
+        score: 75,
       },
 
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 1,
         endMonth: 1,
-        priority: 2,
+        score: 75,
       },
     ],
   },
@@ -137,94 +210,191 @@ export const CROP_CALENDAR: CropCalendar[] = [
   // ============================================================
   {
     cropId: "cauliflower",
-    stateId: 1,
+    stateId: "01",
 
     sowingWindows: [
+      // Bihar - All districts
       {
+        regionCodes: [],
         startMonth: 9,
         endMonth: 11,
-        priority: 1,
+        score: 100,
       },
 
+      // Bihar - All districts
+      //
+      // This crosses the year boundary:
+      // December → January
+      //
+      // Keep this as two windows rather than
+      // startMonth: 12, endMonth: 1.
       {
+        regionCodes: [],
         startMonth: 12,
-        endMonth: 1,
-        priority: 2,
+        endMonth: 12,
+        score: 75,
       },
 
       {
+        regionCodes: [],
+        startMonth: 1,
+        endMonth: 1,
+        score: 75,
+      },
+
+      // Bihar - All districts
+      {
+        regionCodes: [],
         startMonth: 8,
         endMonth: 8,
-        priority: 2,
+        score: 75,
       },
     ],
   },
 
-   // ============================================================
-	
-	// SPINACH / PALAK
-	// ============================================================
-	{
-	  cropId: "spinach",
-	  stateId: 1,
+  // ============================================================
+  // SPINACH / PALAK
+  // ============================================================
+  {
+    cropId: "spinach",
+    stateId: "01",
 
-	  sowingWindows: [
-		{
-		  startMonth: 9,
-		  endMonth: 11,
-		  priority: 1,
-		},
+    sowingWindows: [
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 9,
+        endMonth: 11,
+        score: 100,
+      },
 
-		{
-		  startMonth: 12,
-		  endMonth: 2,
-		  priority: 2,
-		},
+      // December → February
+      {
+        regionCodes: [],
+        startMonth: 12,
+        endMonth: 12,
+        score: 75,
+      },
 
-		{
-		  startMonth: 8,
-		  endMonth: 8,
-		  priority: 2,
-		},
+      {
+        regionCodes: [],
+        startMonth: 1,
+        endMonth: 2,
+        score: 75,
+      },
 
-		{
-		  startMonth: 3,
-		  endMonth: 3,
-		  priority: 3,
-		},
-	  ],
-	},
-	// ============================================================
-	// CORIANDER / DHANIYA
-	// ============================================================
-	{
-	  cropId: "coriander",
-	  stateId: 1,
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 8,
+        endMonth: 8,
+        score: 75,
+      },
 
-	  sowingWindows: [
-		{
-		  startMonth: 10,
-		  endMonth: 11,
-		  priority: 1,
-		},
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 3,
+        endMonth: 3,
+        score: 50,
+      },
+    ],
+  },
 
-		{
-		  startMonth: 12,
-		  endMonth: 1,
-		  priority: 2,
-		},
+  // ============================================================
+  // CORIANDER / DHANIYA
+  // ============================================================
+  {
+    cropId: "coriander",
+    stateId: "01",
 
-		{
-		  startMonth: 9,
-		  endMonth: 9,
-		  priority: 2,
-		},
+    sowingWindows: [
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 10,
+        endMonth: 11,
+        score: 100,
+      },
 
-		{
-		  startMonth: 2,
-		  endMonth: 2,
-		  priority: 3,
-		},
-	  ],
-	},
+      // December → January
+      {
+        regionCodes: [],
+        startMonth: 12,
+        endMonth: 12,
+        score: 75,
+      },
+
+      {
+        regionCodes: [],
+        startMonth: 1,
+        endMonth: 1,
+        score: 75,
+      },
+
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 9,
+        endMonth: 9,
+        score: 75,
+      },
+
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 2,
+        endMonth: 2,
+        score: 50,
+      },
+    ],
+  },
+  // ============================================================
+  // Fenugreek / मेथी
+  // ============================================================
+  {
+    cropId: "fenugreek",
+    stateId: "01",
+
+    sowingWindows: [
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 10,
+        endMonth: 11,
+        score: 100,
+      },
+
+      // December → January
+      {
+        regionCodes: [],
+        startMonth: 12,
+        endMonth: 12,
+        score: 75,
+      },
+
+      {
+        regionCodes: [],
+        startMonth: 1,
+        endMonth: 1,
+        score: 75,
+      },
+
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 9,
+        endMonth: 9,
+        score: 75,
+      },
+
+      // Bihar - All districts
+      {
+        regionCodes: [],
+        startMonth: 2,
+        endMonth: 2,
+        score: 50,
+      },
+    ],
+  },
 ];

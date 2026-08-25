@@ -1,28 +1,53 @@
 // src/data/cropSuitability.ts
 
+// ============================================================
+// TYPES
+// ============================================================
+
+export type SuitabilityLevel =
+  | "high"
+  | "medium"
+  | "low";
+
 export type CropLocationRule = {
   cropId: string;
 
-  stateId: number;
-
   /**
-   * If empty, the rule applies to all districts
-   * within the state.
-   */
-  districtIds?: number[];
-
-  /**
-   * Optional district-specific override.
+   * Region codes.
    *
-   * Useful later when we have reliable district-level
-   * agricultural data.
+   * Format:
+   * "stateId:districtId"
+   *
+   * Examples:
+   * "01:05" = Bihar + Begusarai
+   * "01:09" = Bihar + Darbhanga
+   * "01:23" = Bihar + Muzaffarpur
+   *
+   * If empty, the rule applies to all regions.
    */
-  districtOverrides?: {
-    districtIds: number[];
+  regionCodes?: string[];
 
-    suitability: "high" | "medium" | "low";
+  /**
+   * Base suitability for this location rule.
+   */
+  suitability?: SuitabilityLevel;
+
+  /**
+   * Optional region-specific overrides.
+   *
+   * Useful when reliable district-level
+   * agricultural data is available.
+   */
+  regionCodesOverrides?: {
+    regionCodes: string[];
+
+    suitability: SuitabilityLevel;
   }[];
 };
+
+// ============================================================
+// CROP LOCATION SUITABILITY
+// ============================================================
 
 export const CROP_SUITABILITY: CropLocationRule[] = [
   // ============================================================
@@ -31,23 +56,35 @@ export const CROP_SUITABILITY: CropLocationRule[] = [
   {
     cropId: "brinjal",
 
-    stateId: 1,
-
     /**
-     * Major brinjal cultivation districts identified
-     * from Bihar horticulture information.
+     * Major brinjal cultivation regions.
      *
-     * 5  = Begusarai
-     * 9  = Darbhanga
-     * 23 = Muzaffarpur
-     * 26 = Patna
-     * 37 = Vaishali
+     * 01 = Bihar
+     *
+     * 01:05 = Begusarai
+     * 01:09 = Darbhanga
+     * 01:23 = Muzaffarpur
+     * 01:26 = Patna
+     * 01:37 = Vaishali
      */
-    districtIds: [5, 9, 23, 26, 37],
+    regionCodes: [
+      "01:05",
+      "01:09",
+      "01:23",
+      "01:26",
+      "01:37",
+    ],
 
-    districtOverrides: [
+    regionCodesOverrides: [
       {
-        districtIds: [5, 9, 23, 26, 37],
+        regionCodes: [
+          "01:05",
+          "01:09",
+          "01:23",
+          "01:26",
+          "01:37",
+        ],
+
         suitability: "high",
       },
     ],
@@ -56,15 +93,16 @@ export const CROP_SUITABILITY: CropLocationRule[] = [
   /**
    * Bihar-wide fallback for brinjal.
    *
-   * This is deliberately separate from the major-district
-   * rule so the recommendation engine can prefer a specific
-   * district rule when one exists.
+   * This is deliberately separate from the
+   * region-specific rule so the recommendation
+   * engine can prefer the region-specific rule.
    */
   {
     cropId: "brinjal",
-    stateId: 1,
 
-    districtIds: [],
+    regionCodes: [],
+
+    suitability: "medium",
   },
 
   // ============================================================
@@ -73,15 +111,15 @@ export const CROP_SUITABILITY: CropLocationRule[] = [
   {
     cropId: "okra",
 
-    stateId: 1,
-
     /**
-     * No reliable district-level sowing priority is being
-     * assumed yet.
+     * Bihar-wide rule.
      *
-     * Therefore okra is currently treated as Bihar-wide.
+     * Region-specific suitability can be
+     * added later when reliable data is available.
      */
-    districtIds: [],
+    regionCodes: [],
+
+    suitability: "medium",
   },
 
   // ============================================================
@@ -90,15 +128,14 @@ export const CROP_SUITABILITY: CropLocationRule[] = [
   {
     cropId: "tomato",
 
-    stateId: 1,
-
     /**
      * Bihar-wide rule.
      *
-     * District-specific rules can be added later when
-     * reliable district-level data is available.
+     * Region-specific rules can be added later.
      */
-    districtIds: [],
+    regionCodes: [],
+
+    suitability: "medium",
   },
 
   // ============================================================
@@ -107,33 +144,89 @@ export const CROP_SUITABILITY: CropLocationRule[] = [
   {
     cropId: "cauliflower",
 
-    stateId: 1,
-
     /**
      * Bihar-wide rule.
      */
-    districtIds: [],
+    regionCodes: [],
+
+    suitability: "medium",
+  },
+
+  // ============================================================
+  // SPINACH / PALAK
+  // ============================================================
+  {
+    cropId: "spinach",
+
+    /**
+     * Bihar-wide rule.
+     *
+     * Region-specific suitability can be
+     * added later.
+     */
+    regionCodes: [],
+
+    suitability: "medium",
+  },
+
+  // ============================================================
+  // CORIANDER / DHANIYA
+  // ============================================================
+  {
+    cropId: "coriander",
+
+    /**
+     * Bihar-wide rule.
+     *
+     * Region-specific suitability can be
+     * added later.
+     */
+    regionCodes: [],
+
+    suitability: "medium",
   },
   // ============================================================
-	// SPINACH / PALAK
-	// ============================================================
-	{
-	  cropId: "spinach",
-	  stateId: 1,
+  // Fenugreek / मेथी
+  // ============================================================
+  {
+    cropId: "fenugreek",
 
-	  // Bihar-wide rule.
-	  // District-specific suitability can be added later.
-	  districtIds: [],
-	},
-	// ============================================================
-	// CORIANDER / DHANIYA
-	// ============================================================
-	{
-	  cropId: "coriander",
-	  stateId: 1,
+    /**
+     * Bihar-wide rule.
+     *
+     * Region-specific suitability can be
+     * added later.
+     */
+    regionCodes: [],
 
-	  // Bihar-wide rule.
-	  // District-specific data can be added later.
-	  districtIds: [],
-	},
+    suitability: "medium",
+  },
+  {
+    cropId: "fenugreek",
+
+    /**
+     * Major brinjal cultivation regions.
+     *
+     * 01 = Bihar
+     *
+     * 01:05 = Begusarai
+     * 01:09 = Darbhanga
+     * 01:23 = Muzaffarpur
+     * 01:26 = Patna
+     * 01:37 = Vaishali
+     */
+    regionCodes: [
+      "01:30",
+    ],
+
+    regionCodesOverrides: [
+      {
+        regionCodes: [
+          "01:30",
+        ],
+
+        suitability: "high",
+      },
+    ],
+  },
 ];
