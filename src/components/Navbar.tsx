@@ -913,7 +913,7 @@ export default function Navbar() {
                 }
                 className="flex items-center justify-between py-3 text-left"
               >
-                🌾 Crop Advisor
+                 Crop Advisor
 
                 <FaChevronDown
                   className={`text-xs transition-transform ${
@@ -931,7 +931,7 @@ export default function Navbar() {
                 <div className="ml-4 border-l-2 border-green-100 pl-4">
 
                   <Link
-                    href="/crop-advisor"
+                    href="/crop-advisor/best-crop"
                     onClick={closeMenus}
                     className="block py-2"
                   >
@@ -947,7 +947,7 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    href="/crop-advisor/variety"
+                    href="/crop-advisor/crop-variety"
                     onClick={closeMenus}
                     className="block py-2"
                   >
