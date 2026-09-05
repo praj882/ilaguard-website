@@ -63,7 +63,7 @@ export type CropVarietySource = {
    * National = ICAR/IARI/IIHR/NHB etc. national source
    * Other   = Any other valid official source
    */
-  scope: "Bihar" | "National" | "Other";
+  scope : string;
 };
 
 // ============================================================
@@ -165,8 +165,8 @@ export type CropVariety = {
    * Days required for crop maturity.
    */
   maturityDays?: {
-    min?: number;
-    max?: number;
+    min?: number | null;
+    max?: number | null;
   };
 
   /**
@@ -174,8 +174,8 @@ export type CropVariety = {
    * depending on the source.
    */
   firstHarvestDays?: {
-    min?: number;
-    max?: number;
+    min?: number | null;
+    max?: number | null;
   };
 
   // ==========================================================
@@ -183,8 +183,8 @@ export type CropVariety = {
   // ==========================================================
 
   yield?: {
-    min?: number;
-    max?: number;
+    min?: number | null;
+    max?: number | null;
 
     /**
      * Yield unit as reported by the source.
@@ -207,16 +207,16 @@ export type CropVariety = {
    * curd-related characteristics as used by the existing data.
    */
   fruit?: {
-    color?: string;
-    shape?: string;
+    color?: string | null;
+    shape?: string | null;
 
-    lengthCm?: number;
-    minLengthCm?: number;
-    maxLengthCm?: number;
+    lengthCm?: number | null;
+    minLengthCm?: number | null;
+    maxLengthCm?: number | null;
 
-    weightG?: number;
-    minWeightG?: number;
-    maxWeightG?: number;
+    weightG?: number | null;
+    minWeightG?: number | null;
+    maxWeightG?: number | null;
   };
 
   // ==========================================================

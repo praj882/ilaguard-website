@@ -1,6 +1,7 @@
 export type Month = {
   id: number;
   name: string;
+  nameHindi: string;
 };
 
 export const MONTHS: Month[] = [

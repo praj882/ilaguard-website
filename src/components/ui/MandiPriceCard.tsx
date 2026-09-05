@@ -34,6 +34,8 @@ type CropCategory =
 const CROP_CATEGORIES: {
   id: CropCategory;
   name: string;
+  nameHindi: string;
+  icon: string;
 }[] = [
   {
     id: "Vegetable",
