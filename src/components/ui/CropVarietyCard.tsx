@@ -14,6 +14,59 @@ import {
   type CropVarietyRecommendation,
 } from "@/lib/cropVarietyAdvisor";
 
+// ============================================================
+// TYPES
+// ============================================================
+
+type CropCategory =
+  | "Vegetable"
+  | "Cereal"
+  | "Pulse"
+  | "Oilseed"
+  | "Fruit";
+
+// ============================================================
+// CROP CATEGORIES
+// ============================================================
+
+const CROP_CATEGORIES: {
+  id: CropCategory;
+  name: string;
+  nameHindi: string;
+  icon: string;
+}[] = [
+  {
+    id: "Vegetable",
+    name: "Vegetables",
+	nameHindi: "सब्जियाँ",
+    icon: "🥦",
+  },
+  {
+	id: "Cereal",
+	name: "Cereals",
+	nameHindi: "अनाज",
+	icon: "🌾",
+  },
+  {
+	id: "Pulse",
+	name: "Pulses",
+	nameHindi: "दलहन",
+	icon: "🌱",
+  },
+  {
+	id: "Oilseed",
+	name: "Oilseeds",
+	nameHindi: "तिलहन",
+	icon: "🌻",
+  },
+  {
+	id: "Fruit",
+	name: "Fruits",
+	nameHindi: "फल",
+	icon: "🍎",
+  },
+];
+
 export default function CropVarietyCard() {
   // ============================================================
   // FORM STATE
@@ -22,6 +75,8 @@ export default function CropVarietyCard() {
   const [stateId, setStateId] = useState("");
   const [districtId, setDistrictId] = useState("");
   const [month, setMonth] = useState("");
+  const [cropCategory, setCropCategory] =
+    useState<CropCategory | "">("");
   const [cropId, setCropId] = useState("");
 
   const [result, setResult] =
@@ -48,22 +103,21 @@ export default function CropVarietyCard() {
   // ============================================================
 
   const availableCrops = useMemo(() => {
-    const cropIdsWithVarieties = new Set(
-      CROP_VARIETIES.map((variety) => variety.cropId)
-    );
+    if (!cropCategory) {
+      return [];
+    }
 
-    return CROPS.filter((crop) =>
-      cropIdsWithVarieties.has(crop.id)
+    return CROPS.filter(
+      (crop) =>
+        crop.category === cropCategory
     );
-  }, []);
+  }, [cropCategory]);
 
   // ============================================================
   // RESET DISTRICT WHEN STATE CHANGES
   // ============================================================
 
-  const handleStateChange = (
-    value: string
-  ) => {
+  const handleStateChange = (value: string) => {
     setStateId(value);
     setDistrictId("");
     setResult(null);
@@ -74,25 +128,32 @@ export default function CropVarietyCard() {
   // RESET RESULT WHEN INPUT CHANGES
   // ============================================================
 
-  const handleDistrictChange = (
-    value: string
-  ) => {
+  const handleDistrictChange = (value: string) => {
     setDistrictId(value);
     setResult(null);
     setSearched(false);
   };
 
-  const handleMonthChange = (
-    value: string
-  ) => {
+  const handleMonthChange = (value: string) => {
     setMonth(value);
     setResult(null);
     setSearched(false);
   };
-
-  const handleCropChange = (
+  
+  function handleCropCategoryChange(
     value: string
-  ) => {
+  ) {
+    setCropCategory(
+      value as CropCategory | ""
+    );
+
+    setCropId("");
+
+    setResult(null);
+    setSearched(false);
+  }
+  
+  const handleCropChange = (value: string) => {
     setCropId(value);
     setResult(null);
     setSearched(false);
@@ -123,7 +184,7 @@ export default function CropVarietyCard() {
     setResult(advisorResult);
     setSearched(true);
   };
-
+ 
   // ============================================================
   // SELECTED DATA
   // ============================================================
@@ -177,11 +238,31 @@ export default function CropVarietyCard() {
 
       default:
         return {
-          label: recommendation.recommendationLabel,
+          label:
+            recommendation.recommendationLabel,
           className:
             "bg-gray-100 text-gray-700",
         };
     }
+  };
+
+  // ============================================================
+  // FORMAT SOWING MONTHS
+  // ============================================================
+
+  const getSowingMonths = (
+    sowingMonths: number[]
+  ) => {
+    return [...sowingMonths]
+      .sort((a, b) => a - b)
+      .map(
+        (monthId) =>
+          MONTHS.find(
+            (m) => m.id === monthId
+          )?.name
+      )
+      .filter(Boolean)
+      .join(", ");
   };
 
   // ============================================================
@@ -224,7 +305,9 @@ export default function CropVarietyCard() {
               id="variety-state"
               value={stateId}
               onChange={(e) =>
-                handleStateChange(e.target.value)
+                handleStateChange(
+                  e.target.value
+                )
               }
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
             >
@@ -238,7 +321,8 @@ export default function CropVarietyCard() {
                   value={state.id}
                   disabled={!state.supported}
                 >
-                  {state.name}
+                  {state.name} -{" "}
+                  {state.nameHindi}
                   {!state.supported
                     ? " (Coming Soon)"
                     : ""}
@@ -261,7 +345,9 @@ export default function CropVarietyCard() {
               id="variety-district"
               value={districtId}
               onChange={(e) =>
-                handleDistrictChange(e.target.value)
+                handleDistrictChange(
+                  e.target.value
+                )
               }
               disabled={!stateId}
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:cursor-not-allowed disabled:bg-gray-100"
@@ -278,7 +364,8 @@ export default function CropVarietyCard() {
                     key={district.id}
                     value={district.id}
                   >
-                    {district.name}
+                    {district.name} -{" "}
+                    {district.nameHindi}
                   </option>
                 )
               )}
@@ -299,7 +386,9 @@ export default function CropVarietyCard() {
               id="variety-month"
               value={month}
               onChange={(e) =>
-                handleMonthChange(e.target.value)
+                handleMonthChange(
+                  e.target.value
+                )
               }
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
             >
@@ -312,10 +401,54 @@ export default function CropVarietyCard() {
                   key={item.id}
                   value={item.id}
                 >
-                  {item.name}
+                  {item.name} -{" "}
+                  {item.nameHindi}
                 </option>
               ))}
             </select>
+          </div>
+          
+		  {/* ====================================================
+              CATEGORY
+              ==================================================== */}
+          <div>
+
+            <label
+              htmlFor="crop-category"
+              className="mb-2 block text-sm font-semibold text-gray-700"
+            >
+              Crop Category
+            </label>
+
+            <select
+              id="crop-category"
+              value={cropCategory}
+              onChange={(e) =>
+                handleCropCategoryChange(
+                  e.target.value
+                )
+              }
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+            >
+
+              <option value="">
+                Select Crop Category
+              </option>
+
+              {CROP_CATEGORIES.map(
+                (category) => (
+                  <option
+                    key={category.id}
+                    value={category.id}
+                  >
+				  {category.icon}{category.name} -{" "}
+                  {category.nameHindi}
+                  </option>
+                )
+              )}
+
+            </select>
+
           </div>
 
           {/* CROP */}
@@ -332,7 +465,9 @@ export default function CropVarietyCard() {
               id="variety-crop"
               value={cropId}
               onChange={(e) =>
-                handleCropChange(e.target.value)
+                handleCropChange(
+                  e.target.value
+                )
               }
               className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100"
             >
@@ -419,6 +554,7 @@ export default function CropVarietyCard() {
         result &&
         result.total === 0 && (
           <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm">
+
             <div className="text-4xl">
               🌱
             </div>
@@ -447,6 +583,7 @@ export default function CropVarietyCard() {
             <p className="mt-3 text-xs text-gray-500">
               Try another month or crop.
             </p>
+
           </div>
         )}
 
@@ -474,8 +611,10 @@ export default function CropVarietyCard() {
             </div>
 
             <div className="grid gap-5">
+
               {result.varieties.map(
                 (recommendation, index) => {
+
                   const badge =
                     getPriorityBadge(
                       recommendation
@@ -488,25 +627,30 @@ export default function CropVarietyCard() {
                     <div
                       key={variety.varietyId}
                       className={`relative rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md ${
-                        recommendation.priority ===
-                        1
+                        recommendation.priority === 1
                           ? "border-green-200"
                           : "border-gray-200"
                       }`}
                     >
 
-                      {/* PRIORITY */}
+                      {/* ======================================
+                          PRIORITY
+                      ====================================== */}
 
                       <div className="absolute right-5 top-5">
+
                         <span
                           className={`rounded-full px-3 py-1 text-xs font-semibold ${badge.className}`}
                         >
                           Priority{" "}
                           {recommendation.priority}
                         </span>
+
                       </div>
 
-                      {/* RANK */}
+                      {/* ======================================
+                          VARIETY HEADER
+                      ====================================== */}
 
                       <div className="flex items-start gap-4 pr-24">
 
@@ -521,6 +665,7 @@ export default function CropVarietyCard() {
                         </div>
 
                         <div>
+
                           <h3 className="text-lg font-bold text-gray-900">
                             {variety.name}
                           </h3>
@@ -534,14 +679,21 @@ export default function CropVarietyCard() {
                           >
                             {badge.label}
                           </span>
+
                         </div>
+
                       </div>
 
-                      {/* DETAILS */}
+                      {/* ======================================
+                          BASIC DETAILS
+                      ====================================== */}
 
-                      <div className="mt-5 grid gap-3 border-t border-gray-100 pt-5 sm:grid-cols-2">
+                      <div className="mt-5 grid gap-3 border-t border-gray-100 pt-5 sm:grid-cols-2 lg:grid-cols-3">
+
+                        {/* LOCATION */}
 
                         <div className="rounded-lg bg-gray-50 p-3">
+
                           <p className="text-xs text-gray-500">
                             Location Recommendation
                           </p>
@@ -552,33 +704,184 @@ export default function CropVarietyCard() {
                               ? "📍 District Specific"
                               : "🗺️ State Wide"}
                           </p>
+
                         </div>
 
+                        {/* SOWING MONTHS */}
+
                         <div className="rounded-lg bg-gray-50 p-3">
+
                           <p className="text-xs text-gray-500">
                             Suitable Months
                           </p>
 
                           <p className="mt-1 text-sm font-medium text-gray-800">
-                            {MONTHS.find(
-                              (m) =>
-                                m.id ===
-                                variety.startMonth
-                            )?.name}{" "}
-                            –{" "}
-                            {MONTHS.find(
-                              (m) =>
-                                m.id ===
-                                variety.endMonth
-                            )?.name}
+                            {getSowingMonths(
+                              variety.sowingMonths ?? []
+                            )}
                           </p>
+
                         </div>
+
+                        {/* TYPE */}
+
+                        <div className="rounded-lg bg-gray-50 p-3">
+
+                          <p className="text-xs text-gray-500">
+                            Type
+                          </p>
+
+                          <p className="mt-1 text-sm font-semibold text-gray-800">
+                            {variety.type}
+                          </p>
+
+                        </div>
+
                       </div>
 
-                      {/* NOTES */}
+                      {/* ======================================
+                          PRODUCTION DETAILS
+                      ====================================== */}
+
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                        {/* FIRST HARVEST */}
+
+                        {variety.firstHarvestDays && (
+                          <div className="rounded-lg bg-gray-50 p-3">
+
+                            <p className="text-xs text-gray-500">
+                              First Harvest
+                            </p>
+
+                            <p className="mt-1 text-sm font-semibold text-gray-800">
+                              {variety.firstHarvestDays.min ===
+                              variety.firstHarvestDays.max
+                                ? `${variety.firstHarvestDays.min} days`
+                                : `${variety.firstHarvestDays.min}–${variety.firstHarvestDays.max} days`}
+                            </p>
+
+                          </div>
+                        )}
+
+                        {/* YIELD */}
+
+                        {variety.yield && (
+                          <div className="rounded-lg bg-gray-50 p-3">
+
+                            <p className="text-xs text-gray-500">
+                              Yield
+                            </p>
+
+                            <p className="mt-1 text-sm font-semibold text-gray-800">
+                              {variety.yield.min}–
+                              {variety.yield.max}{" "}
+                              {variety.yield.unit}
+                            </p>
+
+                          </div>
+                        )}
+
+                      </div>
+
+                      {/* ======================================
+                          FRUIT CHARACTERISTICS
+                      ====================================== */}
+
+                      {variety.fruit && (
+                        <div className="mt-4 rounded-xl border border-gray-100 bg-gray-50 p-4">
+
+                          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                            Fruit Characteristics
+                          </p>
+
+                          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+
+                            {variety.fruit.color && (
+                              <div>
+
+                                <p className="text-xs text-gray-500">
+                                  Color
+                                </p>
+
+                                <p className="mt-1 text-sm font-medium capitalize text-gray-800">
+                                  {variety.fruit.color}
+                                </p>
+
+                              </div>
+                            )}
+
+                            {variety.fruit.shape && (
+                              <div>
+
+                                <p className="text-xs text-gray-500">
+                                  Shape
+                                </p>
+
+                                <p className="mt-1 text-sm font-medium capitalize text-gray-800">
+                                  {variety.fruit.shape}
+                                </p>
+
+                              </div>
+                            )}
+
+                            {variety.fruit.weightG !==
+                              undefined && (
+                              <div>
+
+                                <p className="text-xs text-gray-500">
+                                  Fruit Weight
+                                </p>
+
+                                <p className="mt-1 text-sm font-medium text-gray-800">
+                                  {variety.fruit.weightG} g
+                                </p>
+
+                              </div>
+                            )}
+
+                          </div>
+
+                        </div>
+                      )}
+
+                      {/* ======================================
+                          RESISTANCE
+                      ====================================== */}
+
+                      {variety.resistance &&
+                        variety.resistance.length > 0 && (
+                          <div className="mt-4 rounded-lg bg-green-50 p-4">
+
+                            <p className="text-xs font-semibold text-green-800">
+                              Disease / Pest Resistance
+                            </p>
+
+                            <div className="mt-2 flex flex-wrap gap-2">
+
+                              {variety.resistance.map(
+                                (item) => (
+                                  <span
+                                    key={item}
+                                    className="rounded-full bg-white px-3 py-1 text-xs font-medium text-green-800"
+                                  >
+                                    ✓ {item}
+                                  </span>
+                                )
+                              )}
+
+                            </div>
+
+                          </div>
+                        )}
+
+                      {/* ======================================
+                          NOTES
+                      ====================================== */}
 
                       {variety.notes && (
                         <div className="mt-4 rounded-lg bg-green-50 p-4">
+
                           <p className="text-xs font-semibold text-green-800">
                             Why this variety?
                           </p>
@@ -586,15 +889,19 @@ export default function CropVarietyCard() {
                           <p className="mt-1 text-sm leading-6 text-green-900">
                             {variety.notes}
                           </p>
+
                         </div>
                       )}
+
                     </div>
                   );
                 }
               )}
+
             </div>
           </div>
         )}
+
     </div>
   );
 }

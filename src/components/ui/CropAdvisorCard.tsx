@@ -454,7 +454,8 @@ export default function CropAdvisorCard() {
                           !state.supported
                         }
                       >
-                        {state.name}
+                        {state.name} -{" "}
+                        {state.nameHindi}
 
                         {!state.supported
                           ? " (Coming Soon)"
@@ -504,7 +505,8 @@ export default function CropAdvisorCard() {
                         key={district.id}
                         value={district.id}
                       >
-                        {district.name}
+                        {district.name}  -{" "}
+                        {district.nameHindi}
                       </option>
                     )
                   )}
@@ -547,7 +549,8 @@ export default function CropAdvisorCard() {
                         key={item.id}
                         value={item.id}
                       >
-                        {item.name}
+                        {item.name} -{" "}
+                        {item.nameHindi}
                       </option>
                     )
                   )}
