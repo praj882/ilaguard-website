@@ -135,4 +135,28 @@ export const CROPS: Crop[] = [
   category: "Vegetable",
   icon: "🌿",
   },
+  
+  {
+  id: "pea",
+  name: "Pea",
+  nameHindi: "मटर",
+  category: "Vegetable",
+  icon: "🌱",
+  },
+  
+  {
+	id: "cucumber",
+	name: "Cucumber",
+	nameHindi: "खीरा",
+	category: "Vegetable",
+	icon: "🥒",
+  },
+  
+  {
+	id: "broccoli",
+	name: "Broccoli",
+	nameHindi: "ब्रोकली",
+	category: "Vegetable",
+	icon: "🥦",
+  },
 ];

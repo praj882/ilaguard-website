@@ -38,22 +38,32 @@ const CROP_CATEGORIES: {
   {
     id: "Vegetable",
     name: "Vegetables",
+	nameHindi: "सब्जियाँ",
+    icon: "🥦",
   },
   {
-    id: "Cereal",
-    name: "Cereals",
+	id: "Cereal",
+	name: "Cereals",
+	nameHindi: "अनाज",
+	icon: "🌾",
   },
   {
-    id: "Pulse",
-    name: "Pulses",
+	id: "Pulse",
+	name: "Pulses",
+	nameHindi: "दलहन",
+	icon: "🌱",
   },
   {
-    id: "Oilseed",
-    name: "Oilseeds",
+	id: "Oilseed",
+	name: "Oilseeds",
+	nameHindi: "तिलहन",
+	icon: "🌻",
   },
   {
-    id: "Fruit",
-    name: "Fruits",
+	id: "Fruit",
+	name: "Fruits",
+	nameHindi: "फल",
+	icon: "🍎",
   },
 ];
 
@@ -463,7 +473,8 @@ export default function MandiPriceCard() {
                       !state.supported
                     }
                   >
-                    {state.name}
+                    {state.name} -{" "}
+                    {state.nameHindi}
 
                     {!state.supported
                       ? " (Coming Soon)"
@@ -515,7 +526,8 @@ export default function MandiPriceCard() {
                     key={district.id}
                     value={district.id}
                   >
-                    {district.name}
+                    {district.name} -{" "}
+                    {district.nameHindi}
                   </option>
                 )
               )}
@@ -606,7 +618,8 @@ export default function MandiPriceCard() {
                     key={category.id}
                     value={category.id}
                   >
-                    {category.name}
+                    {category.icon}{category.name} -{" "}
+                    {category.nameHindi}
                   </option>
                 )
               )}
@@ -647,14 +660,15 @@ export default function MandiPriceCard() {
                   ? "Select Crop"
                   : "Select Category First"}
               </option>
-
+              
               {filteredMandiCrops.map(
                 (crop) => (
                   <option
                     key={crop.id}
                     value={crop.id}
                   >
-                    {crop.name}
+                    {crop.icon} {crop.name} —{" "}
+                  {crop.nameHindi}
                   </option>
                 )
               )}

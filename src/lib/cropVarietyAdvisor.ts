@@ -20,18 +20,20 @@ export type CropVarietyRecommendation = {
   variety: CropVariety;
 
   /**
-   * Variety suitability from cropVarieties.ts.
+   * Final suitability after applying
+   * location-specific sowing override.
    */
   suitability: VarietySuitability;
 
   /**
    * Whether the variety rule is specific
-   * to the selected district or general/state-wide.
+   * to the selected district or state-wide.
    */
   locationType: VarietyLocationType;
 
   /**
-   * Final priority of the variety.
+   * Final priority after applying
+   * default/override suitability.
    *
    * Priority 1 = Highly Suitable
    * Priority 2 = Suitable
@@ -40,10 +42,14 @@ export type CropVarietyRecommendation = {
   priority: VarietyPriority;
 
   /**
-   * Human-readable label.
+   * Human-readable recommendation label.
    */
   recommendationLabel: string;
 };
+
+// ============================================================
+// RESULT
+// ============================================================
 
 export type CropVarietyAdvisorResult = {
   cropId: string;
@@ -51,6 +57,16 @@ export type CropVarietyAdvisorResult = {
   varieties: CropVarietyRecommendation[];
 
   total: number;
+};
+
+// ============================================================
+// SOWING RULE
+// ============================================================
+
+type ResolvedSowingRule = {
+  months: number[];
+  suitability: VarietySuitability;
+  locationType: VarietyLocationType;
 };
 
 // ============================================================
@@ -101,57 +117,34 @@ function getRecommendationLabel(
 // MONTH CHECK
 // ============================================================
 
-function isMonthInWindow(
+function isMonthAvailable(
   month: number,
-  startMonth: number,
-  endMonth: number
+  months?: number[]
 ): boolean {
-  /*
-   * Normal window
-   *
-   * Example:
-   * March → May
-   */
-  if (startMonth <= endMonth) {
-    return (
-      month >= startMonth &&
-      month <= endMonth
-    );
-  }
-
-  /*
-   * Cross-year window
-   *
-   * Example:
-   * October → January
-   *
-   * Matches:
-   * October
-   * November
-   * December
-   * January
-   */
-  return (
-    month >= startMonth ||
-    month <= endMonth
-  );
+  return months?.includes(month) ?? false;
 }
 
 // ============================================================
-// REGION CODE
+// STATE CODE
+// ============================================================
+
+function getStateCode(
+  stateId: string | number
+): string {
+  return String(stateId).padStart(2, "0");
+}
+
+// ============================================================
+// DISTRICT REGION CODE
 // ============================================================
 
 function getRegionCode(
   stateId: string | number,
   districtId: string | number
 ): string {
-  return `${String(stateId).padStart(
-    2,
-    "0"
-  )}:${String(districtId).padStart(
-    2,
-    "0"
-  )}`;
+  return `${getStateCode(stateId)}:${String(
+    districtId
+  ).padStart(2, "0")}`;
 }
 
 // ============================================================
@@ -163,12 +156,20 @@ function getVarietyLocationType(
   regionCode: string
 ): VarietyLocationType | null {
   /*
-   * District-specific variety rule
+   * If regionCodes are defined on the variety,
+   * they represent locations where the variety
+   * is specifically applicable.
    */
   if (
     variety.regionCodes &&
     variety.regionCodes.length > 0
   ) {
+    /*
+     * Exact district match.
+     *
+     * Example:
+     * "01:30" = Bihar + Samastipur
+     */
     if (
       variety.regionCodes.includes(
         regionCode
@@ -178,17 +179,115 @@ function getVarietyLocationType(
     }
 
     /*
-     * This variety has specific regions,
-     * but selected district isn't one of them.
+     * No matching location.
      */
     return null;
   }
 
   /*
-   * Empty regionCodes means
-   * general/state-wide recommendation.
+   * Empty regionCodes means the variety
+   * has no location restriction.
+   *
+   * Therefore it can be considered
+   * state/general applicable.
    */
   return "state";
+}
+
+// ============================================================
+// RESOLVE SOWING RULE
+// ============================================================
+
+function resolveSowingRule(
+  variety: CropVariety,
+  stateCode: string,
+  regionCode: string
+): ResolvedSowingRule | null {
+  // ==========================================================
+  // 1. CHECK LOCATION-SPECIFIC OVERRIDES
+  // ==========================================================
+
+  const overrides =
+    variety.sowingWindowsOverride ?? [];
+
+  /*
+   * ----------------------------------------------------------
+   * 1A. Exact district override
+   * ----------------------------------------------------------
+   *
+   * Example:
+   *
+   * regionCodes: ["01:30"]
+   *
+   * This should have highest priority.
+   */
+
+  const districtOverride =
+    overrides.find((override) =>
+      override.regionCodes.includes(
+        regionCode
+      )
+    );
+
+  if (districtOverride) {
+    return {
+      months:
+        districtOverride.months,
+
+      suitability:
+        districtOverride.suitability,
+
+      locationType:
+        "district",
+    };
+  }
+
+  /*
+   * ----------------------------------------------------------
+   * 1B. State-level override
+   * ----------------------------------------------------------
+   *
+   * Example:
+   *
+   * regionCodes: ["02"]
+   *
+   * This applies to the entire state.
+   */
+
+  const stateOverride =
+    overrides.find((override) =>
+      override.regionCodes.includes(
+        stateCode
+      )
+    );
+
+  if (stateOverride) {
+    return {
+      months:
+        stateOverride.months,
+
+      suitability:
+        stateOverride.suitability,
+
+      locationType:
+        "state",
+    };
+  }
+
+  // ==========================================================
+  // 2. NO OVERRIDE → USE DEFAULT
+  // ==========================================================
+
+  return {
+    months:
+      variety.sowingMonths,
+
+    suitability:
+      variety.suitability,
+
+    locationType:
+      "state",
+  };
 }
 
 // ============================================================
@@ -216,6 +315,13 @@ export function getRecommendedVarieties(
     };
   }
 
+  // ==========================================================
+  // REGION CODES
+  // ==========================================================
+
+  const stateCode =
+    getStateCode(stateId);
+
   const regionCode =
     getRegionCode(
       stateId,
@@ -223,33 +329,23 @@ export function getRecommendedVarieties(
     );
 
   // ==========================================================
-  // FIND VARIETIES
+  // RECOMMENDATIONS
   // ==========================================================
 
-  const recommendations: CropVarietyRecommendation[] =
-    [];
+  const recommendations:
+    CropVarietyRecommendation[] = [];
+
+  // ==========================================================
+  // PROCESS VARIETIES
+  // ==========================================================
 
   for (const variety of CROP_VARIETIES) {
-    /*
-     * Only process varieties belonging
-     * to the selected crop.
-     */
+    // ========================================================
+    // CROP CHECK
+    // ========================================================
+
     if (
       variety.cropId !== cropId
-    ) {
-      continue;
-    }
-
-    // ========================================================
-    // MONTH CHECK
-    // ========================================================
-
-    if (
-      !isMonthInWindow(
-        month,
-        variety.startMonth,
-        variety.endMonth
-      )
     ) {
       continue;
     }
@@ -258,19 +354,74 @@ export function getRecommendedVarieties(
     // LOCATION CHECK
     // ========================================================
 
-    const locationType =
+    const baseLocationType =
       getVarietyLocationType(
         variety,
         regionCode
       );
 
     /*
-     * Variety is not applicable
-     * to selected location.
+     * If the variety itself has specific
+     * region restrictions and the selected
+     * location doesn't match, don't recommend it.
      */
-    if (!locationType) {
+    if (!baseLocationType) {
       continue;
     }
+
+    // ========================================================
+    // RESOLVE SOWING RULE
+    // ========================================================
+
+    const sowingRule =
+      resolveSowingRule(
+        variety,
+        stateCode,
+        regionCode
+      );
+
+    if (!sowingRule) {
+      continue;
+    }
+
+    // ========================================================
+    // MONTH CHECK
+    // ========================================================
+
+    /*
+     * IMPORTANT:
+     *
+     * If a location-specific override exists,
+     * its months completely replace the default
+     * sowingMonths for that location.
+     *
+     * Example:
+     *
+     * Default:
+     * [6, 7, 8, 9, 10, 11]
+     *
+     * UP override:
+     * [9, 10, 11]
+     *
+     * UP + August:
+     * NOT recommended.
+     */
+
+    if (
+      !isMonthAvailable(
+        month,
+        sowingRule.months
+      )
+    ) {
+      continue;
+    }
+
+    // ========================================================
+    // FINAL SUITABILITY
+    // ========================================================
+
+    const finalSuitability =
+      sowingRule.suitability;
 
     // ========================================================
     // PRIORITY
@@ -278,8 +429,25 @@ export function getRecommendedVarieties(
 
     const priority =
       getPriority(
-        variety.suitability
+        finalSuitability
       );
+
+    // ========================================================
+    // LOCATION TYPE
+    // ========================================================
+
+    /*
+     * If a district-specific override is used,
+     * report district.
+     *
+     * Otherwise, use the variety's own
+     * location specificity.
+     */
+    const locationType =
+      sowingRule.locationType ===
+      "district"
+        ? "district"
+        : baseLocationType;
 
     // ========================================================
     // ADD RECOMMENDATION
@@ -289,7 +457,7 @@ export function getRecommendedVarieties(
       variety,
 
       suitability:
-        variety.suitability,
+        finalSuitability,
 
       locationType,
 
@@ -308,13 +476,10 @@ export function getRecommendedVarieties(
 
   recommendations.sort(
     (a, b) => {
-      /*
-       * Priority first:
-       *
-       * P1
-       * P2
-       * P3
-       */
+      // ------------------------------------------------------
+      // 1. PRIORITY
+      // ------------------------------------------------------
+
       if (
         a.priority !==
         b.priority
@@ -325,10 +490,10 @@ export function getRecommendedVarieties(
         );
       }
 
-      /*
-       * Prefer district-specific
-       * varieties over general varieties.
-       */
+      // ------------------------------------------------------
+      // 2. LOCATION SPECIFICITY
+      // ------------------------------------------------------
+
       if (
         a.locationType !==
         b.locationType
@@ -341,9 +506,10 @@ export function getRecommendedVarieties(
         );
       }
 
-      /*
-       * Stable alphabetical fallback.
-       */
+      // ------------------------------------------------------
+      // 3. VARIETY NAME
+      // ------------------------------------------------------
+
       return a.variety.name.localeCompare(
         b.variety.name
       );
