@@ -46,7 +46,6 @@ export const RADISH_VARIETIES: CropVariety[] = [
     nameHindi: "पूसा चेतकी",
 
     type: "Variety",
-    regionCodes: [],
     // Suitable for Bihar because the official IARI source
     // gives it for the northern plains / throughout India.
     regionCodes: [ ],

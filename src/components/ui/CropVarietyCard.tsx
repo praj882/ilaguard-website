@@ -717,7 +717,7 @@ export default function CropVarietyCard() {
 
                           <p className="mt-1 text-sm font-medium text-gray-800">
                             {getSowingMonths(
-                              variety.sowingMonths
+                              variety.sowingMonths ?? []
                             )}
                           </p>
 

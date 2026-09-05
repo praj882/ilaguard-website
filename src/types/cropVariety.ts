@@ -101,7 +101,8 @@ export type CropVariety = {
    * Variety / Hybrid / F1 Hybrid
    */
   type?: CropVarietyType;
-
+  
+  purpose ?: string;
   // ==========================================================
   // LOCATION
   // ==========================================================

@@ -279,14 +279,11 @@ function resolveSowingRule(
   // ==========================================================
 
   return {
-    months:
-      variety.sowingMonths,
+	months: variety.sowingMonths ?? [],
 
-    suitability:
-      variety.suitability,
+	suitability: variety.suitability ?? "medium",
 
-    locationType:
-      "state",
+	locationType: "state",
   };
 }
 
