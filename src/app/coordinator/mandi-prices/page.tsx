@@ -638,7 +638,6 @@ export default function MandiPricesPage() {
       // ======================================================
 
       if (existingPrice) {
-        saveResult =
           await updateMandiPrice(
             selectedMandi.id,
             selectedCrop.id,
@@ -657,6 +656,7 @@ export default function MandiPricesPage() {
               updatedBy: user.uid,
             } as any
           );
+		  saveResult = true;
       }
 
       // ======================================================
@@ -664,10 +664,10 @@ export default function MandiPricesPage() {
       // ======================================================
 
       else {
-        saveResult =
           await saveMandiPrice(
             priceData as any
           );
+		  saveResult = true;
       }
 
       // ======================================================
