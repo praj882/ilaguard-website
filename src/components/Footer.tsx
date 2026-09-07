@@ -159,7 +159,16 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-
+			  
+              <li>
+                <Link
+                  href="/coordinator/login"
+                  className="hover:text-orange-400 transition-colors duration-300"
+                >
+                  Mandi coordinator Login
+                </Link>
+              </li>
+			  
             </ul>
           </div>
 

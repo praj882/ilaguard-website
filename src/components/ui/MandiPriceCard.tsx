@@ -1,3 +1,5 @@
+// src/components/MandiPriceCard.tsx
+
 "use client";
 
 import {
@@ -40,32 +42,32 @@ const CROP_CATEGORIES: {
   {
     id: "Vegetable",
     name: "Vegetables",
-	nameHindi: "सब्जियाँ",
+    nameHindi: "सब्जियाँ",
     icon: "🥦",
   },
   {
-	id: "Cereal",
-	name: "Cereals",
-	nameHindi: "अनाज",
-	icon: "🌾",
+    id: "Cereal",
+    name: "Cereals",
+    nameHindi: "अनाज",
+    icon: "🌾",
   },
   {
-	id: "Pulse",
-	name: "Pulses",
-	nameHindi: "दलहन",
-	icon: "🌱",
+    id: "Pulse",
+    name: "Pulses",
+    nameHindi: "दलहन",
+    icon: "🌱",
   },
   {
-	id: "Oilseed",
-	name: "Oilseeds",
-	nameHindi: "तिलहन",
-	icon: "🌻",
+    id: "Oilseed",
+    name: "Oilseeds",
+    nameHindi: "तिलहन",
+    icon: "🌻",
   },
   {
-	id: "Fruit",
-	name: "Fruits",
-	nameHindi: "फल",
-	icon: "🍎",
+    id: "Fruit",
+    name: "Fruits",
+    nameHindi: "फल",
+    icon: "🍎",
   },
 ];
 
@@ -74,9 +76,9 @@ const CROP_CATEGORIES: {
 // ============================================================
 
 export default function MandiPriceCard() {
-  // ============================================================
-  // MANDI PRICE STATE
-  // ============================================================
+  // ==========================================================
+  // LOCATION / CROP SELECTION
+  // ==========================================================
 
   const [mandiStateId, setMandiStateId] =
     useState("");
@@ -96,9 +98,9 @@ export default function MandiPriceCard() {
   const [showMandiPrice, setShowMandiPrice] =
     useState(false);
 
-  // ============================================================
-  // FIREBASE MANDI PRICE STATE
-  // ============================================================
+  // ==========================================================
+  // FIREBASE PRICE STATE
+  // ==========================================================
 
   const [mandiPrice, setMandiPrice] =
     useState<MandiPrice | null>(null);
@@ -109,9 +111,9 @@ export default function MandiPriceCard() {
   const [priceError, setPriceError] =
     useState(false);
 
-  // ============================================================
+  // ==========================================================
   // DISTRICTS FOR SELECTED STATE
-  // ============================================================
+  // ==========================================================
 
   const mandiDistricts = useMemo(() => {
     if (!mandiStateId) {
@@ -125,9 +127,9 @@ export default function MandiPriceCard() {
     );
   }, [mandiStateId]);
 
-  // ============================================================
+  // ==========================================================
   // MANDIS FOR SELECTED DISTRICT
-  // ============================================================
+  // ==========================================================
 
   const filteredMandis = useMemo(() => {
     if (!mandiDistrictId) {
@@ -153,9 +155,9 @@ export default function MandiPriceCard() {
     );
   }, [mandiDistrictId]);
 
-  // ============================================================
+  // ==========================================================
   // CROPS FOR SELECTED CATEGORY
-  // ============================================================
+  // ==========================================================
 
   const filteredMandiCrops = useMemo(() => {
     if (!cropCategory) {
@@ -168,35 +170,31 @@ export default function MandiPriceCard() {
     );
   }, [cropCategory]);
 
-  // ============================================================
+  // ==========================================================
   // SELECTED MANDI
-  // ============================================================
+  // ==========================================================
 
   const selectedMandi =
     MANDIS.find(
       (mandi) =>
         mandi.id === mandiId
-    );
+    ) ?? null;
 
-  // ============================================================
+  // ==========================================================
   // SELECTED CROP
-  // ============================================================
+  // ==========================================================
 
   const selectedMandiCrop =
     CROPS.find(
       (crop) =>
         crop.id === cropId
-    );
+    ) ?? null;
 
-  // ============================================================
-  // FIREBASE REAL-TIME MANDI PRICE
-  // ============================================================
+  // ==========================================================
+  // REALTIME FIREBASE PRICE
+  // ==========================================================
 
   useEffect(() => {
-    /*
-     * Don't subscribe until both
-     * mandi and crop are selected.
-     */
     if (!mandiId || !cropId) {
       setMandiPrice(null);
       setPriceLoading(false);
@@ -205,20 +203,10 @@ export default function MandiPriceCard() {
       return;
     }
 
-    /*
-     * Start loading.
-     */
     setPriceLoading(true);
     setPriceError(false);
     setMandiPrice(null);
 
-    /*
-     * Subscribe to Firebase RTDB.
-     *
-     * Any change made in Firebase
-     * will automatically update
-     * the card.
-     */
     const unsubscribe =
       subscribeToMandiPrice(
         mandiId,
@@ -226,16 +214,13 @@ export default function MandiPriceCard() {
         (price) => {
           setMandiPrice(price);
           setPriceLoading(false);
+
+          if (price === null) {
+            setPriceError(false);
+          }
         }
       );
 
-    /*
-     * Cleanup listener when:
-     *
-     * - mandi changes
-     * - crop changes
-     * - component unmounts
-     */
     return () => {
       unsubscribe();
     };
@@ -244,9 +229,9 @@ export default function MandiPriceCard() {
     cropId,
   ]);
 
-  // ============================================================
+  // ==========================================================
   // HANDLERS
-  // ============================================================
+  // ==========================================================
 
   function handleMandiStateChange(
     value: string
@@ -255,6 +240,7 @@ export default function MandiPriceCard() {
 
     setMandiDistrictId("");
     setMandiId("");
+
     setCropCategory("");
     setCropId("");
 
@@ -264,32 +250,35 @@ export default function MandiPriceCard() {
     setPriceError(false);
   }
 
+  // ----------------------------------------------------------
+
   function handleMandiDistrictChange(
     value: string
   ) {
     setMandiDistrictId(value);
 
     setMandiId("");
-    setCropId("");
 
     setMandiPrice(null);
     setShowMandiPrice(false);
     setPriceLoading(false);
     setPriceError(false);
   }
+
+  // ----------------------------------------------------------
 
   function handleMandiChange(
     value: string
   ) {
     setMandiId(value);
 
-    setCropId("");
-
     setMandiPrice(null);
     setShowMandiPrice(false);
     setPriceLoading(false);
     setPriceError(false);
   }
+
+  // ----------------------------------------------------------
 
   function handleCropCategoryChange(
     value: string
@@ -306,6 +295,8 @@ export default function MandiPriceCard() {
     setPriceError(false);
   }
 
+  // ----------------------------------------------------------
+
   function handleCropChange(
     value: string
   ) {
@@ -316,6 +307,10 @@ export default function MandiPriceCard() {
     setPriceLoading(false);
     setPriceError(false);
   }
+
+  // ==========================================================
+  // CHECK PRICE
+  // ==========================================================
 
   function handleCheckMandiPrice() {
     if (
@@ -328,41 +323,33 @@ export default function MandiPriceCard() {
       return;
     }
 
+    setPriceError(false);
     setShowMandiPrice(true);
   }
 
-  // ============================================================
+  // ==========================================================
   // FORMAT PRICE
-  // ============================================================
+  // ==========================================================
 
   function formatPrice(
     value: number
   ) {
-    return value.toLocaleString(
+    return Number(value).toLocaleString(
       "en-IN"
     );
   }
 
-  // ============================================================
-  // FORMAT UPDATED DATE
-  // ============================================================
+  // ==========================================================
+  // FORMAT MARKET DATE
+  // ==========================================================
 
-  function formatUpdatedDate(
+  function formatMarketDate(
     value: string
   ) {
     if (!value) {
       return "Not available";
     }
 
-    /*
-     * If Firebase stores:
-     *
-     * 2026-08-24
-     *
-     * display:
-     *
-     * 24 Aug 2026
-     */
     const date = new Date(
       `${value}T00:00:00`
     );
@@ -385,27 +372,40 @@ export default function MandiPriceCard() {
     );
   }
 
-  // ============================================================
+  // ==========================================================
+  // FORMAT UPDATED TIMESTAMP
+  // ==========================================================
+
+  function formatUpdatedAt(timestamp?: number): string {
+	if (!timestamp) return "—";
+
+	return new Date(timestamp).toLocaleString("en-IN", {
+		day: "2-digit",
+		month: "short",
+		year: "numeric",
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: true,
+	});
+  }
+
+  // ==========================================================
   // RENDER
-  // ============================================================
+  // ==========================================================
 
   return (
     <div className="rounded-3xl border border-amber-100 bg-white p-4 shadow-xl sm:p-6 lg:p-8">
-
-      {/* ========================================================
+      {/* ======================================================
           HEADER
-          ======================================================== */}
+      ====================================================== */}
 
       <div>
-
         <div className="flex items-center gap-3">
-
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-2xl">
             💰
           </div>
 
           <div>
-
             <h3 className="text-xl font-bold text-gray-900">
               Check Mandi Price
             </h3>
@@ -413,37 +413,31 @@ export default function MandiPriceCard() {
             <p className="text-sm text-gray-500">
               Know the market before you sell
             </p>
-
           </div>
-
         </div>
 
-        {/* ======================================================
+        {/* ====================================================
             INFORMATION
-            ====================================================== */}
+        ==================================================== */}
 
         <div className="mt-6 rounded-xl bg-amber-50 p-4">
-
           <p className="text-sm leading-relaxed text-amber-800">
-            Select your local mandi and crop
-            to check the latest available
-            market price.
+            अपने स्थानीय मंडी और फसल का चयन
+            करें और उपलब्ध नवीनतम बाजार भाव
+            देखें।
           </p>
-
         </div>
 
-        {/* ======================================================
+        {/* ====================================================
             FORM
-            ====================================================== */}
+        ==================================================== */}
 
         <div className="mt-6 space-y-4">
-
-          {/* ====================================================
+          {/* ==================================================
               STATE
-              ==================================================== */}
+          ================================================== */}
 
           <div>
-
             <label
               htmlFor="mandi-state"
               className="mb-2 block text-sm font-semibold text-gray-700"
@@ -461,7 +455,6 @@ export default function MandiPriceCard() {
               }
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             >
-
               <option value="">
                 Select State
               </option>
@@ -484,17 +477,14 @@ export default function MandiPriceCard() {
                   </option>
                 )
               )}
-
             </select>
-
           </div>
 
-          {/* ====================================================
+          {/* ==================================================
               DISTRICT
-              ==================================================== */}
+          ================================================== */}
 
           <div>
-
             <label
               htmlFor="mandi-district"
               className="mb-2 block text-sm font-semibold text-gray-700"
@@ -504,7 +494,9 @@ export default function MandiPriceCard() {
 
             <select
               id="mandi-district"
-              value={mandiDistrictId}
+              value={
+                mandiDistrictId
+              }
               onChange={(e) =>
                 handleMandiDistrictChange(
                   e.target.value
@@ -515,7 +507,6 @@ export default function MandiPriceCard() {
               }
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition disabled:cursor-not-allowed disabled:bg-gray-100 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             >
-
               <option value="">
                 {mandiStateId
                   ? "Select District"
@@ -529,21 +520,20 @@ export default function MandiPriceCard() {
                     value={district.id}
                   >
                     {district.name} -{" "}
-                    {district.nameHindi}
+                    {
+                      district.nameHindi
+                    }
                   </option>
                 )
               )}
-
             </select>
-
           </div>
 
-          {/* ====================================================
+          {/* ==================================================
               MANDI
-              ==================================================== */}
+          ================================================== */}
 
           <div>
-
             <label
               htmlFor="mandi"
               className="mb-2 block text-sm font-semibold text-gray-700"
@@ -564,7 +554,6 @@ export default function MandiPriceCard() {
               }
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition disabled:cursor-not-allowed disabled:bg-gray-100 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             >
-
               <option value="">
                 {mandiDistrictId
                   ? "Select Mandi"
@@ -581,17 +570,14 @@ export default function MandiPriceCard() {
                   </option>
                 )
               )}
-
             </select>
-
           </div>
 
-          {/* ====================================================
+          {/* ==================================================
               CATEGORY
-              ==================================================== */}
+          ================================================== */}
 
           <div>
-
             <label
               htmlFor="crop-category"
               className="mb-2 block text-sm font-semibold text-gray-700"
@@ -601,7 +587,9 @@ export default function MandiPriceCard() {
 
             <select
               id="crop-category"
-              value={cropCategory}
+              value={
+                cropCategory
+              }
               onChange={(e) =>
                 handleCropCategoryChange(
                   e.target.value
@@ -609,7 +597,6 @@ export default function MandiPriceCard() {
               }
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             >
-
               <option value="">
                 Select Crop Category
               </option>
@@ -620,22 +607,22 @@ export default function MandiPriceCard() {
                     key={category.id}
                     value={category.id}
                   >
-                    {category.icon}{category.name} -{" "}
-                    {category.nameHindi}
+                    {category.icon}{" "}
+                    {category.name} -{" "}
+                    {
+                      category.nameHindi
+                    }
                   </option>
                 )
               )}
-
             </select>
-
           </div>
 
-          {/* ====================================================
+          {/* ==================================================
               CROP
-              ==================================================== */}
+          ================================================== */}
 
           <div>
-
             <label
               htmlFor="mandi-crop"
               className="mb-2 block text-sm font-semibold text-gray-700"
@@ -656,32 +643,32 @@ export default function MandiPriceCard() {
               }
               className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-gray-700 outline-none transition disabled:cursor-not-allowed disabled:bg-gray-100 focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             >
-
               <option value="">
                 {cropCategory
                   ? "Select Crop"
                   : "Select Category First"}
               </option>
-              
+
               {filteredMandiCrops.map(
                 (crop) => (
                   <option
                     key={crop.id}
                     value={crop.id}
                   >
-                    {crop.icon} {crop.name} —{" "}
-                  {crop.nameHindi}
+                    {crop.icon}{" "}
+                    {crop.name} —{" "}
+                    {
+                      crop.nameHindi
+                    }
                   </option>
                 )
               )}
-
             </select>
-
           </div>
 
-          {/* ====================================================
+          {/* ==================================================
               BUTTON
-              ==================================================== */}
+          ================================================== */}
 
           <button
             type="button"
@@ -699,23 +686,20 @@ export default function MandiPriceCard() {
           >
             📊 Check Mandi Price
           </button>
-
         </div>
 
-        {/* ========================================================
+        {/* ====================================================
             RESULT
-            ======================================================== */}
+        ==================================================== */}
 
         {showMandiPrice && (
           <div className="mt-6">
-
-            {/* ====================================================
+            {/* ==================================================
                 LOADING
-                ==================================================== */}
+            ================================================== */}
 
             {priceLoading && (
               <div className="rounded-2xl border border-amber-100 bg-amber-50 p-6 text-center">
-
                 <div className="text-3xl">
                   ⏳
                 </div>
@@ -725,20 +709,19 @@ export default function MandiPriceCard() {
                 </p>
 
                 <p className="mt-1 text-sm text-gray-500">
-                  Fetching price from Firebase
+                  Fetching price from
+                  Firebase
                 </p>
-
               </div>
             )}
 
-            {/* ====================================================
-                FIREBASE ERROR
-                ==================================================== */}
+            {/* ==================================================
+                ERROR
+            ================================================== */}
 
             {!priceLoading &&
               priceError && (
                 <div className="rounded-2xl border border-red-100 bg-red-50 p-5 text-center">
-
                   <div className="text-3xl">
                     ⚠️
                   </div>
@@ -750,25 +733,21 @@ export default function MandiPriceCard() {
                   <p className="mt-1 text-sm text-red-600">
                     Please try again later.
                   </p>
-
                 </div>
               )}
 
-            {/* ====================================================
+            {/* ==================================================
                 PRICE AVAILABLE
-                ==================================================== */}
+            ================================================== */}
 
             {!priceLoading &&
               !priceError &&
               mandiPrice && (
-                <div className="rounded-2xl border border-gray-100 bg-gray-50 p-5">
-
+                <div className="rounded-2xl border border-green-100 bg-gray-50 p-5">
                   {/* Header */}
 
                   <div className="flex items-start justify-between gap-3">
-
                     <div>
-
                       <p className="text-sm text-gray-500">
                         Current Market Price
                       </p>
@@ -781,27 +760,30 @@ export default function MandiPriceCard() {
 
                       <p className="text-sm text-gray-500">
                         {
-                          selectedMandi?.name
+                          selectedMandiCrop?.nameHindi
                         }
                       </p>
 
+                      <p className="mt-1 text-sm font-medium text-gray-700">
+                        📍{" "}
+                        {
+                          selectedMandi?.name
+                        }
+                      </p>
                     </div>
 
                     {/* Modal Price */}
 
                     <div className="rounded-xl bg-green-100 px-3 py-2 text-right">
-
                       <p className="text-xs font-medium text-green-700">
                         Modal Price
                       </p>
 
                       <p className="text-lg font-bold text-green-800">
-
                         ₹
                         {formatPrice(
                           mandiPrice.modal
                         )}
-
                       </p>
 
                       <p className="text-xs text-green-600">
@@ -810,113 +792,123 @@ export default function MandiPriceCard() {
                           mandiPrice.unit
                         }
                       </p>
-
                     </div>
-
                   </div>
 
-                  {/* ==================================================
+                  {/* =================================================
                       MIN / MODAL / MAX
-                      ================================================== */}
+                  ================================================= */}
 
                   <div className="mt-5 grid grid-cols-3 gap-2">
-
                     {/* Minimum */}
 
                     <div className="rounded-xl bg-white p-3 text-center">
-
                       <p className="text-xs text-gray-500">
                         Minimum
                       </p>
 
                       <p className="mt-1 font-bold text-gray-800">
-
                         ₹
                         {formatPrice(
                           mandiPrice.min
                         )}
-
                       </p>
-
                     </div>
 
                     {/* Modal */}
 
                     <div className="rounded-xl bg-green-50 p-3 text-center">
-
                       <p className="text-xs text-green-700">
                         Modal
                       </p>
 
                       <p className="mt-1 font-bold text-green-800">
-
                         ₹
                         {formatPrice(
                           mandiPrice.modal
                         )}
-
                       </p>
-
                     </div>
 
                     {/* Maximum */}
 
                     <div className="rounded-xl bg-white p-3 text-center">
-
                       <p className="text-xs text-gray-500">
                         Maximum
                       </p>
 
                       <p className="mt-1 font-bold text-gray-800">
-
                         ₹
                         {formatPrice(
                           mandiPrice.max
                         )}
+                      </p>
+                    </div>
+                  </div>
 
+                  {/* =================================================
+                      MARKET DATE
+                  ================================================= */}
+
+                  <div className="mt-4 rounded-xl border border-slate-200 bg-white p-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-xs text-gray-500">
+                        Market Date
+                      </span>
+
+                      <span className="text-sm font-semibold text-gray-800">
+                        {formatMarketDate(
+                          mandiPrice.marketDate
+                        )}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* =================================================
+                      SOURCE + UPDATED
+                  ================================================= */}
+
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="text-xs text-gray-400">
+                        Last updated
                       </p>
 
+                      <p className="mt-0.5 text-xs font-medium text-gray-600">
+                        {formatUpdatedAt(
+                          mandiPrice.updatedAt
+                        )}
+                      </p>
                     </div>
 
-                  </div>
-
-                  {/* ==================================================
-                      UPDATE INFORMATION
-                      ================================================== */}
-
-                  <div className="mt-4 flex items-center justify-between gap-3">
-
-                    <p className="text-xs text-gray-400">
-
-                      Last updated:{" "}
-                      {formatUpdatedDate(
-                        mandiPrice.updatedAt
+                    <div className="flex items-center gap-2">
+                      {mandiPrice.source && (
+                        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
+                          Source:{" "}
+                          {
+                            mandiPrice.source
+                          }
+                        </span>
                       )}
 
-                    </p>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">
+                        <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
 
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">
-
-                      <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-
-                      Live
-
-                    </span>
-
+                        Live
+                      </span>
+                    </div>
                   </div>
-
                 </div>
               )}
 
-            {/* ====================================================
+            {/* ==================================================
                 NO PRICE DATA
-                ==================================================== */}
+            ================================================== */}
 
             {!priceLoading &&
               !priceError &&
               !mandiPrice && (
                 <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 text-center">
-
                   <div className="text-3xl">
                     📊
                   </div>
@@ -930,30 +922,24 @@ export default function MandiPriceCard() {
                     price data for this mandi
                     and crop.
                   </p>
-
                 </div>
               )}
-
           </div>
         )}
 
-        {/* ========================================================
+        {/* ====================================================
             DISCLAIMER
-            ======================================================== */}
+        ==================================================== */}
 
         <div className="mt-5 rounded-xl bg-gray-50 p-3">
-
           <p className="text-xs leading-relaxed text-gray-500">
             ℹ️ Mandi prices can change daily.
             Always verify the latest local
             market price before making a
             selling decision.
           </p>
-
         </div>
-
       </div>
-
     </div>
   );
 }
