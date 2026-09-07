@@ -1,11 +1,12 @@
 // src/lib/mandiPriceService.ts
 
 import {
-  ref,
   get,
+  onValue,
+  push,
+  ref,
   set,
   update,
-  onValue,
 } from "firebase/database";
 
 import { database } from "@/lib/firebase";
@@ -24,7 +25,19 @@ export type MandiPrice = {
 
   unit: string;
 
-  updatedAt: string;
+  // Actual market date for which price is reported.
+  // Format: YYYY-MM-DD
+  marketDate: string;
+
+  // Actual Firebase update timestamp.
+  updatedAt: number;
+
+  // Firebase Auth UID of coordinator/admin.
+  updatedBy: string;
+
+  // Optional source of price.
+  // Example: Coordinator, AGMARKNET, Mandi Board, etc.
+  source?: string;
 };
 
 export type MandiPriceInput = {
@@ -36,17 +49,27 @@ export type MandiPriceInput = {
   max: number;
 
   unit?: string;
-  updatedAt?: string;
+
+  marketDate: string;
+
+  updatedBy: string;
+
+  source?: string;
+};
+
+export type MandiPriceHistory = MandiPrice & {
+  historyId: string;
 };
 
 // ============================================================
-// FIREBASE PATH
+// FIREBASE PATHS
 // ============================================================
 
 const MANDI_PRICES_PATH = "mandiPrices";
+const MANDI_PRICE_HISTORY_PATH = "mandiPriceHistory";
 
 // ============================================================
-// CREATE FIREBASE PATH
+// HELPERS
 // ============================================================
 
 function getMandiPricePath(
@@ -54,6 +77,13 @@ function getMandiPricePath(
   cropId: string
 ): string {
   return `${MANDI_PRICES_PATH}/${mandiId}/${cropId}`;
+}
+
+function getMandiPriceHistoryPath(
+  mandiId: string,
+  cropId: string
+): string {
+  return `${MANDI_PRICE_HISTORY_PATH}/${mandiId}/${cropId}`;
 }
 
 // ============================================================
@@ -64,42 +94,18 @@ export async function getMandiPrice(
   mandiId: string,
   cropId: string
 ): Promise<MandiPrice | null> {
-  try {
-    const priceRef = ref(
-      database,
-      getMandiPricePath(
-        mandiId,
-        cropId
-      )
-    );
+  const priceRef = ref(
+    database,
+    getMandiPricePath(mandiId, cropId)
+  );
 
-    const snapshot = await get(
-      priceRef
-    );
+  const snapshot = await get(priceRef);
 
-    if (!snapshot.exists()) {
-      return null;
-    }
-
-    const data =
-      snapshot.val() as Omit<
-        MandiPrice,
-        "mandiId" | "cropId"
-      >;
-
-    return {
-      mandiId,
-      cropId,
-      ...data,
-    };
-  } catch (error) {
-    console.error(
-      "Failed to fetch mandi price:",
-      error
-    );
-
+  if (!snapshot.exists()) {
     return null;
   }
+
+  return snapshot.val() as MandiPrice;
 }
 
 // ============================================================
@@ -107,247 +113,299 @@ export async function getMandiPrice(
 // ============================================================
 
 export async function getAllMandiPrices(): Promise<
-  MandiPrice[]
+  Record<string, MandiPrice>
 > {
-  try {
-    const pricesRef = ref(
-      database,
-      MANDI_PRICES_PATH
-    );
+  const pricesRef = ref(
+    database,
+    MANDI_PRICES_PATH
+  );
 
-    const snapshot = await get(
-      pricesRef
-    );
+  const snapshot = await get(pricesRef);
 
-    if (!snapshot.exists()) {
-      return [];
-    }
-
-    const data =
-      snapshot.val() as Record<
-        string,
-        Record<
-          string,
-          Omit<
-            MandiPrice,
-            "mandiId" | "cropId"
-          >
-        >
-      >;
-
-    const prices: MandiPrice[] = [];
-
-    for (const mandiId of Object.keys(
-      data
-    )) {
-      const mandiCrops =
-        data[mandiId];
-
-      for (const cropId of Object.keys(
-        mandiCrops
-      )) {
-        prices.push({
-          mandiId,
-          cropId,
-          ...mandiCrops[cropId],
-        });
-      }
-    }
-
-    return prices;
-  } catch (error) {
-    console.error(
-      "Failed to fetch mandi prices:",
-      error
-    );
-
-    return [];
+  if (!snapshot.exists()) {
+    return {};
   }
+
+  const data =
+    snapshot.val() as Record<
+      string,
+      Record<string, MandiPrice>
+    >;
+
+  const flattened: Record<string, MandiPrice> = {};
+
+  Object.entries(data).forEach(
+    ([mandiId, crops]) => {
+      if (!crops) return;
+
+      Object.entries(crops).forEach(
+        ([cropId, price]) => {
+          flattened[
+            `${mandiId}_${cropId}`
+          ] = price;
+        }
+      );
+    }
+  );
+
+  return flattened;
 }
 
 // ============================================================
-// GET PRICES FOR A MANDI
+// GET ALL PRICES FOR ONE MANDI
 // ============================================================
 
 export async function getMandiPrices(
   mandiId: string
 ): Promise<MandiPrice[]> {
-  try {
-    const mandiRef = ref(
-      database,
-      `${MANDI_PRICES_PATH}/${mandiId}`
-    );
+  const mandiRef = ref(
+    database,
+    `${MANDI_PRICES_PATH}/${mandiId}`
+  );
 
-    const snapshot = await get(
-      mandiRef
-    );
+  const snapshot = await get(mandiRef);
 
-    if (!snapshot.exists()) {
-      return [];
-    }
-
-    const data =
-      snapshot.val() as Record<
-        string,
-        Omit<
-          MandiPrice,
-          "mandiId" | "cropId"
-        >
-      >;
-
-    return Object.entries(data).map(
-      ([cropId, price]) => ({
-        mandiId,
-        cropId,
-        ...price,
-      })
-    );
-  } catch (error) {
-    console.error(
-      "Failed to fetch mandi prices:",
-      error
-    );
-
+  if (!snapshot.exists()) {
     return [];
   }
+
+  const data =
+    snapshot.val() as Record<
+      string,
+      MandiPrice
+    >;
+
+  return Object.values(data);
 }
 
 // ============================================================
-// GET PRICES FOR A CROP
+// GET ALL PRICES FOR ONE CROP
 // ============================================================
 
 export async function getCropMandiPrices(
   cropId: string
 ): Promise<MandiPrice[]> {
-  try {
-    const prices =
-      await getAllMandiPrices();
+  const allPrices =
+    await getAllMandiPrices();
 
-    return prices.filter(
-      (price) =>
-        price.cropId === cropId
-    );
-  } catch (error) {
-    console.error(
-      "Failed to fetch crop mandi prices:",
-      error
-    );
-
-    return [];
-  }
+  return Object.values(allPrices).filter(
+    (price) => price.cropId === cropId
+  );
 }
 
 // ============================================================
-// SAVE / CREATE MANDI PRICE
+// SAVE MANDI PRICE
+// ============================================================
+//
+// This function:
+// 1. Updates current mandi price.
+// 2. Creates a history record.
+//
+// Firebase:
+//
+// mandiPrices
+//   └── mandiId
+//        └── cropId
+//             ├── min
+//             ├── modal
+//             ├── max
+//             ├── unit
+//             ├── marketDate
+//             ├── updatedAt
+//             ├── updatedBy
+//             └── source
+//
+// mandiPriceHistory
+//   └── mandiId
+//        └── cropId
+//             └── historyId
+//                  ├── min
+//                  ├── modal
+//                  ├── max
+//                  ├── unit
+//                  ├── marketDate
+//                  ├── updatedAt
+//                  ├── updatedBy
+//                  └── source
+//
 // ============================================================
 
 export async function saveMandiPrice(
   input: MandiPriceInput
-): Promise<boolean> {
-  try {
-    const price: Omit<
-      MandiPrice,
-      "mandiId" | "cropId"
-    > = {
-      min: input.min,
-      modal: input.modal,
-      max: input.max,
+): Promise<MandiPrice> {
+  // ----------------------------------------------------------
+  // Validation
+  // ----------------------------------------------------------
 
-      unit:
-        input.unit ??
-        "quintal",
-
-      updatedAt:
-        input.updatedAt ??
-        new Date()
-          .toISOString()
-          .split("T")[0],
-    };
-
-    const priceRef = ref(
-      database,
-      getMandiPricePath(
-        input.mandiId,
-        input.cropId
-      )
-    );
-
-    await set(
-      priceRef,
-      price
-    );
-
-    return true;
-  } catch (error) {
-    console.error(
-      "Failed to save mandi price:",
-      error
-    );
-
-    return false;
+  if (!input.mandiId) {
+    throw new Error("Mandi ID is required.");
   }
+
+  if (!input.cropId) {
+    throw new Error("Crop ID is required.");
+  }
+
+  if (!input.marketDate) {
+    throw new Error(
+      "Market date is required."
+    );
+  }
+
+  if (!input.updatedBy) {
+    throw new Error(
+      "Updated by user ID is required."
+    );
+  }
+
+  if (
+    !Number.isFinite(input.min) ||
+    !Number.isFinite(input.modal) ||
+    !Number.isFinite(input.max)
+  ) {
+    throw new Error(
+      "Invalid mandi price values."
+    );
+  }
+
+  if (
+    input.min < 0 ||
+    input.modal < 0 ||
+    input.max < 0
+  ) {
+    throw new Error(
+      "Mandi prices cannot be negative."
+    );
+  }
+
+  if (
+    input.min > input.modal ||
+    input.modal > input.max
+  ) {
+    throw new Error(
+      "Price must satisfy Min ≤ Modal ≤ Max."
+    );
+  }
+
+  // ----------------------------------------------------------
+  // Prepare current price
+  // ----------------------------------------------------------
+
+  const now = Date.now();
+
+  const mandiPrice: MandiPrice = {
+    mandiId: input.mandiId,
+    cropId: input.cropId,
+
+    min: input.min,
+    modal: input.modal,
+    max: input.max,
+
+    unit: input.unit ?? "quintal",
+
+    marketDate: input.marketDate,
+
+    updatedAt: now,
+
+    updatedBy: input.updatedBy,
+
+    ...(input.source
+      ? { source: input.source }
+      : {}),
+  };
+
+  // ----------------------------------------------------------
+  // Save current price
+  // ----------------------------------------------------------
+
+  const currentPriceRef = ref(
+    database,
+    getMandiPricePath(
+      input.mandiId,
+      input.cropId
+    )
+  );
+
+  await set(
+    currentPriceRef,
+    mandiPrice
+  );
+
+  // ----------------------------------------------------------
+  // Save history
+  // ----------------------------------------------------------
+
+  const historyParentRef = ref(
+    database,
+    getMandiPriceHistoryPath(
+      input.mandiId,
+      input.cropId
+    )
+  );
+
+  const historyRef = push(
+    historyParentRef
+  );
+
+  const historyId =
+    historyRef.key;
+
+  if (!historyId) {
+    throw new Error(
+      "Unable to create history ID."
+    );
+  }
+
+  const historyData: MandiPriceHistory = {
+    ...mandiPrice,
+    historyId,
+  };
+
+  await set(
+    historyRef,
+    historyData
+  );
+
+  return mandiPrice;
 }
 
 // ============================================================
 // UPDATE MANDI PRICE
 // ============================================================
+//
+// Updates current price AND creates a complete history record.
+//
+// The existing price is first loaded and merged with the
+// supplied updates so that the history record always contains
+// the complete mandi price.
+//
+// ============================================================
 
 export async function updateMandiPrice(
   mandiId: string,
   cropId: string,
-  values: Partial<
-    Pick<
+  updates: Partial<
+    Omit<
       MandiPrice,
-      | "min"
-      | "modal"
-      | "max"
-      | "unit"
+      "mandiId" | "cropId"
     >
   >
-): Promise<boolean> {
-  try {
-    const priceRef = ref(
-      database,
-      getMandiPricePath(
-        mandiId,
-        cropId
-      )
-    );
+): Promise<void> {
+  // ----------------------------------------------------------
+  // Validation
+  // ----------------------------------------------------------
 
-    await update(
-      priceRef,
-      {
-        ...values,
-
-        updatedAt:
-          new Date()
-            .toISOString()
-            .split("T")[0],
-      }
-    );
-
-    return true;
-  } catch (error) {
-    console.error(
-      "Failed to update mandi price:",
-      error
-    );
-
-    return false;
+  if (!mandiId) {
+    throw new Error("Mandi ID is required.");
   }
-}
 
-// ============================================================
-// REAL-TIME LISTENER
-// ============================================================
+  if (!cropId) {
+    throw new Error("Crop ID is required.");
+  }
 
-export function subscribeToMandiPrice(
-  mandiId: string,
-  cropId: string,
-  callback: (
-    price: MandiPrice | null
-  ) => void
-) {
+  // ----------------------------------------------------------
+  // Get existing price
+  // ----------------------------------------------------------
+
   const priceRef = ref(
     database,
     getMandiPricePath(
@@ -356,36 +414,234 @@ export function subscribeToMandiPrice(
     )
   );
 
-  const unsubscribe =
-    onValue(
-      priceRef,
-      (snapshot) => {
-        if (!snapshot.exists()) {
-          callback(null);
-          return;
-        }
+  const snapshot = await get(
+    priceRef
+  );
 
-        const data =
-          snapshot.val() as Omit<
-            MandiPrice,
-            "mandiId" | "cropId"
-          >;
+  if (!snapshot.exists()) {
+    throw new Error(
+      "Mandi price does not exist. Use saveMandiPrice() for a new price."
+    );
+  }
 
-        callback({
-          mandiId,
-          cropId,
-          ...data,
-        });
-      },
-      (error) => {
-        console.error(
-          "Mandi price listener error:",
-          error
-        );
+  const existingPrice =
+    snapshot.val() as MandiPrice;
 
+  // ----------------------------------------------------------
+  // Prepare complete updated price
+  // ----------------------------------------------------------
+
+  const now = Date.now();
+
+  const updatedPrice: MandiPrice = {
+    mandiId,
+    cropId,
+
+    min:
+      updates.min ??
+      existingPrice.min,
+
+    modal:
+      updates.modal ??
+      existingPrice.modal,
+
+    max:
+      updates.max ??
+      existingPrice.max,
+
+    unit:
+      updates.unit ??
+      existingPrice.unit ??
+      "quintal",
+
+    marketDate:
+      updates.marketDate ??
+      existingPrice.marketDate,
+
+    updatedAt: now,
+
+    updatedBy:
+      updates.updatedBy ??
+      existingPrice.updatedBy,
+
+    ...(updates.source !== undefined
+      ? updates.source
+        ? { source: updates.source }
+        : {}
+      : existingPrice.source
+        ? { source: existingPrice.source }
+        : {}),
+  };
+
+  // ----------------------------------------------------------
+  // Validate complete updated price
+  // ----------------------------------------------------------
+
+  if (!updatedPrice.marketDate) {
+    throw new Error(
+      "Market date is required."
+    );
+  }
+
+  if (!updatedPrice.updatedBy) {
+    throw new Error(
+      "Updated by user ID is required."
+    );
+  }
+
+  if (
+    !Number.isFinite(updatedPrice.min) ||
+    !Number.isFinite(updatedPrice.modal) ||
+    !Number.isFinite(updatedPrice.max)
+  ) {
+    throw new Error(
+      "Invalid mandi price values."
+    );
+  }
+
+  if (
+    updatedPrice.min < 0 ||
+    updatedPrice.modal < 0 ||
+    updatedPrice.max < 0
+  ) {
+    throw new Error(
+      "Mandi prices cannot be negative."
+    );
+  }
+
+  if (
+    updatedPrice.min >
+      updatedPrice.modal ||
+    updatedPrice.modal >
+      updatedPrice.max
+  ) {
+    throw new Error(
+      "Price must satisfy Min ≤ Modal ≤ Max."
+    );
+  }
+
+  // ----------------------------------------------------------
+  // Create history reference
+  // ----------------------------------------------------------
+
+  const historyParentRef = ref(
+    database,
+    getMandiPriceHistoryPath(
+      mandiId,
+      cropId
+    )
+  );
+
+  const historyRef = push(
+    historyParentRef
+  );
+
+  const historyId =
+    historyRef.key;
+
+  if (!historyId) {
+    throw new Error(
+      "Unable to create history ID."
+    );
+  }
+
+  const historyData: MandiPriceHistory = {
+    ...updatedPrice,
+    historyId,
+  };
+
+  // ----------------------------------------------------------
+  // Save current + history
+  // ----------------------------------------------------------
+
+  await update(
+    priceRef,
+    updatedPrice
+  );
+
+  await set(
+    historyRef,
+    historyData
+  );
+}
+
+// ============================================================
+// REALTIME SINGLE PRICE
+// ============================================================
+
+export function subscribeToMandiPrice(
+  mandiId: string,
+  cropId: string,
+  callback: (
+    price: MandiPrice | null
+  ) => void
+): () => void {
+  const priceRef = ref(
+    database,
+    getMandiPricePath(
+      mandiId,
+      cropId
+    )
+  );
+
+  return onValue(
+    priceRef,
+    (snapshot) => {
+      if (!snapshot.exists()) {
         callback(null);
+        return;
       }
+
+      callback(
+        snapshot.val() as MandiPrice
+      );
+    }
+  );
+}
+
+// ============================================================
+// GET MANDI PRICE HISTORY
+// ============================================================
+
+export async function getMandiPriceHistory(
+  mandiId: string,
+  cropId: string
+): Promise<MandiPriceHistory[]> {
+  const historyRef = ref(
+    database,
+    getMandiPriceHistoryPath(
+      mandiId,
+      cropId
+    )
+  );
+
+  const snapshot = await get(
+    historyRef
+  );
+
+  if (!snapshot.exists()) {
+    return [];
+  }
+
+  const data =
+    snapshot.val() as Record<
+      string,
+      Omit<MandiPriceHistory, "historyId">
+    >;
+
+  const history: MandiPriceHistory[] =
+    Object.entries(data).map(
+      ([historyId, item]) => ({
+        historyId,
+        ...item,
+      })
     );
 
-  return unsubscribe;
+  // Newest first.
+  history.sort(
+    (a, b) =>
+      b.updatedAt - a.updatedAt
+  );
+
+  return history;
 }

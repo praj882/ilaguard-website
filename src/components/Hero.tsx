@@ -36,16 +36,16 @@ export default function Hero() {
 
                 <Link
                   href="/products"
-                  className="rounded-xl bg-orange-500 px-7 py-4 font-semibold hover:bg-orange-600 transition"
+                  className="rounded-xl border border-green-400 bg-orange-500 px-7 py-4 font-semibold hover:bg-orange-600 transition"
                 >
                   Explore Products →
                 </Link>
 
                 <a
-                  href="#crop-advisor"
-                  className="rounded-xl border border-green-400 px-7 py-4 font-semibold hover:bg-green-900 transition"
+                  href="/crop-advisor/crop-variety"
+                  className="rounded-xl border border-green-400 bg-orange-500 px-7 py-4 font-semibold hover:bg-orange-600 transition"
                 >
-                  🌾 Find Your Best Crop
+                  🌾 Find Your Best Crop Variety
                 </a>
 
               </div>

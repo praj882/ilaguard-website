@@ -27,7 +27,7 @@ export const STATES: State[] = [
     code: "WB",
     name: "West Bengal",
     nameHindi: "पश्चिम बंगाल",
-    supported: false,
+    supported: true,
   },
   {
     id: "05",

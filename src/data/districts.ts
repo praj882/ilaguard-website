@@ -1,6 +1,10 @@
 import { District } from "../data/location";
 
 export const DISTRICTS: District[] = [
+  // ============================================================
+  // BIHAR
+  // stateId: 01
+  // 38 official districts
   { id: "01", stateId: "01", name: "Araria", nameHindi: "अररिया" },
   { id: "02", stateId: "01", name: "Arwal", nameHindi: "अरवल" },
   { id: "03", stateId: "01", name: "Aurangabad", nameHindi: "औरंगाबाद" },
@@ -39,4 +43,32 @@ export const DISTRICTS: District[] = [
   { id: "36", stateId: "01", name: "Supaul", nameHindi: "सुपौल" },
   { id: "37", stateId: "01", name: "Vaishali", nameHindi: "वैशाली" },
   { id: "38", stateId: "01", name: "West Champaran", nameHindi: "पश्चिमी चंपारण" },
+  // ============================================================
+  // WEST BENGAL
+  // stateId: 04
+  // 23 official districts
+  // ============================================================
+  { id: "01", stateId: "04", name: "Alipurduar", nameHindi: "अलीपुरद्वार" },
+  { id: "02", stateId: "04", name: "Bankura", nameHindi: "बांकुड़ा" },
+  { id: "03", stateId: "04", name: "Birbhum", nameHindi: "बीरभूम" },
+  { id: "04", stateId: "04", name: "Cooch Behar", nameHindi: "कूच बिहार" },
+  { id: "05", stateId: "04", name: "Dakshin Dinajpur", nameHindi: "दक्षिण दिनाजपुर" },
+  { id: "06", stateId: "04", name: "Darjeeling", nameHindi: "दार्जिलिंग" },
+  { id: "07", stateId: "04", name: "Hooghly", nameHindi: "हुगली" },
+  { id: "08", stateId: "04", name: "Howrah", nameHindi: "हावड़ा" },
+  { id: "09", stateId: "04", name: "Jalpaiguri", nameHindi: "जलपाईगुड़ी" },
+  { id: "10", stateId: "04", name: "Jhargram", nameHindi: "झाड़ग्राम" },
+  { id: "11", stateId: "04", name: "Kalimpong", nameHindi: "कालिम्पोंग" },
+  { id: "12", stateId: "04", name: "Kolkata", nameHindi: "कोलकाता" },
+  { id: "13", stateId: "04", name: "Malda", nameHindi: "मालदा" },
+  { id: "14", stateId: "04", name: "Murshidabad", nameHindi: "मुर्शिदाबाद" },
+  { id: "15", stateId: "04", name: "Nadia", nameHindi: "नदिया" },
+  { id: "16", stateId: "04", name: "North 24 Parganas", nameHindi: "उत्तर 24 परगना" },
+  { id: "17", stateId: "04", name: "Paschim Bardhaman", nameHindi: "पश्चिम बर्धमान" },
+  { id: "18", stateId: "04", name: "Paschim Medinipur", nameHindi: "पश्चिम मेदिनीपुर" },
+  { id: "19", stateId: "04", name: "Purba Bardhaman", nameHindi: "पूर्व बर्धमान" },
+  { id: "20", stateId: "04", name: "Purba Medinipur", nameHindi: "पूर्व मेदिनीपुर" },
+  { id: "21", stateId: "04", name: "Purulia", nameHindi: "पुरुलिया" },
+  { id: "22", stateId: "04", name: "South 24 Parganas", nameHindi: "दक्षिण 24 परगना" },
+  { id: "23", stateId: "04", name: "Uttar Dinajpur", nameHindi: "उत्तर दिनाजपुर" },
 ];

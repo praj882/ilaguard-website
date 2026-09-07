@@ -224,4 +224,100 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "West Champaran",
   },
+  // ============================================================
+  // WEST BENGAL
+  // stateId: 04
+  //
+  // Markets relevant to Bihar-side farmers
+  // ============================================================
+
+  // ============================================================
+  // MALDA
+  // ============================================================
+
+  {
+    id: "english-bazar",
+    name: "English Bazar Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  {
+    id: "kaliachak",
+    name: "Kaliachak Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  {
+    id: "gazole",
+    name: "Gazole Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  {
+    id: "samsi",
+    name: "Samsi Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  {
+    id: "chanchal",
+    name: "Chanchal Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  {
+    id: "tulsihata",
+    name: "Tulsihata Market Yard",
+    stateName: "West Bengal",
+    districtName: "Malda",
+  },
+
+  // ============================================================
+  // UTTAR DINAJPUR
+  // ============================================================
+
+  {
+    id: "islampur",
+    name: "Islampur Principal Market Yard",
+    stateName: "West Bengal",
+    districtName: "Uttar Dinajpur",
+  },
+
+  // ============================================================
+  // DARJEELING
+  // ============================================================
+
+  {
+    id: "siliguri",
+    name: "Siliguri Principal Market Yard",
+    stateName: "West Bengal",
+    districtName: "Darjeeling",
+  },
+
+  // ============================================================
+  // JALPAIGURI
+  // ============================================================
+
+  {
+    id: "dhupguri",
+    name: "Dhupguri Principal Market Yard",
+    stateName: "West Bengal",
+    districtName: "Jalpaiguri",
+  },
+
+  // ============================================================
+  // DAKSHIN DINAJPUR
+  // ============================================================
+
+  {
+    id: "gangarampur",
+    name: "Gangarampur Krishak Bazar",
+    stateName: "West Bengal",
+    districtName: "Dakshin Dinajpur",
+  },
 ];
