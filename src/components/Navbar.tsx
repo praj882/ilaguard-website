@@ -561,7 +561,38 @@ export default function Navbar() {
                       </div>
 
                     </Link>
+                    
+					{/* =================================================
+                        Weather Forecast
+                    ================================================== */}
 
+                    <Link
+                      href="/weather"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lime-100 text-2xl">
+                          🌦️
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            Get Weather Forecast Near You
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            Check local weather to make better crop decisions.
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
 
                     {/* =================================================
                         SOIL REPORT
@@ -952,6 +983,14 @@ export default function Navbar() {
                     className="block py-2"
                   >
                     🌱 Find Best Crop Variety
+                  </Link>
+				  
+				  <Link
+                    href="/weather"
+                    onClick={closeMenus}
+                    className="block py-2"
+                  >
+                    🌦️Find Your Nerest Weather Forecast Information
                   </Link>
 
                   <Link
