@@ -25,19 +25,44 @@ export type MandiPrice = {
 
   unit: string;
 
-  // Actual market date for which price is reported.
-  // Format: YYYY-MM-DD
+  // YYYY-MM-DD
   marketDate: string;
 
-  // Actual Firebase update timestamp.
+  // Market variety, when available.
+  variety?: string;
+
+  // Firebase timestamp.
   updatedAt: number;
 
-  // Firebase Auth UID of coordinator/admin.
+  // Firebase Auth UID or system identifier.
   updatedBy: string;
 
-  // Optional source of price.
-  // Example: Coordinator, AGMARKNET, Mandi Board, etc.
+  // Coordinator / DataGovIndia / AGMARKNET etc.
   source?: string;
+
+  // True when a coordinator intentionally overrides
+  // automated API data.
+  manualOverride?: boolean;
+
+  // ==========================================================
+  // data.gov.in metadata
+  // ==========================================================
+
+  apiUpdatedAt?: number;
+
+  apiResourceId?: string;
+
+  apiState?: string;
+
+  apiDistrict?: string;
+
+  apiMarket?: string;
+
+  apiCommodity?: string;
+
+  apiVariety?: string;
+
+  apiGrade?: string;
 };
 
 export type MandiPriceInput = {
@@ -52,21 +77,29 @@ export type MandiPriceInput = {
 
   marketDate: string;
 
+  variety?: string;
+
   updatedBy: string;
 
   source?: string;
+
+  manualOverride?: boolean;
 };
 
-export type MandiPriceHistory = MandiPrice & {
-  historyId: string;
-};
+export type MandiPriceHistory =
+  MandiPrice & {
+    historyId: string;
+  };
 
 // ============================================================
 // FIREBASE PATHS
 // ============================================================
 
-const MANDI_PRICES_PATH = "mandiPrices";
-const MANDI_PRICE_HISTORY_PATH = "mandiPriceHistory";
+const MANDI_PRICES_PATH =
+  "mandiPrices";
+
+const MANDI_PRICE_HISTORY_PATH =
+  "mandiPriceHistory";
 
 // ============================================================
 // HELPERS
@@ -87,7 +120,46 @@ function getMandiPriceHistoryPath(
 }
 
 // ============================================================
-// GET SINGLE MANDI PRICE
+// VALIDATION HELPERS
+// ============================================================
+
+function validatePriceValues(
+  min: number,
+  modal: number,
+  max: number
+): void {
+  if (
+    !Number.isFinite(min) ||
+    !Number.isFinite(modal) ||
+    !Number.isFinite(max)
+  ) {
+    throw new Error(
+      "Invalid mandi price values."
+    );
+  }
+
+  if (
+    min < 0 ||
+    modal < 0 ||
+    max < 0
+  ) {
+    throw new Error(
+      "Mandi prices cannot be negative."
+    );
+  }
+
+  if (
+    min > modal ||
+    modal > max
+  ) {
+    throw new Error(
+      "Price must satisfy Min ≤ Modal ≤ Max."
+    );
+  }
+}
+
+// ============================================================
+// GET SINGLE PRICE
 // ============================================================
 
 export async function getMandiPrice(
@@ -96,10 +168,14 @@ export async function getMandiPrice(
 ): Promise<MandiPrice | null> {
   const priceRef = ref(
     database,
-    getMandiPricePath(mandiId, cropId)
+    getMandiPricePath(
+      mandiId,
+      cropId
+    )
   );
 
-  const snapshot = await get(priceRef);
+  const snapshot =
+    await get(priceRef);
 
   if (!snapshot.exists()) {
     return null;
@@ -109,7 +185,7 @@ export async function getMandiPrice(
 }
 
 // ============================================================
-// GET ALL MANDI PRICES
+// GET ALL PRICES
 // ============================================================
 
 export async function getAllMandiPrices(): Promise<
@@ -120,7 +196,8 @@ export async function getAllMandiPrices(): Promise<
     MANDI_PRICES_PATH
   );
 
-  const snapshot = await get(pricesRef);
+  const snapshot =
+    await get(pricesRef);
 
   if (!snapshot.exists()) {
     return {};
@@ -132,11 +209,14 @@ export async function getAllMandiPrices(): Promise<
       Record<string, MandiPrice>
     >;
 
-  const flattened: Record<string, MandiPrice> = {};
+  const flattened:
+    Record<string, MandiPrice> = {};
 
   Object.entries(data).forEach(
     ([mandiId, crops]) => {
-      if (!crops) return;
+      if (!crops) {
+        return;
+      }
 
       Object.entries(crops).forEach(
         ([cropId, price]) => {
@@ -152,7 +232,7 @@ export async function getAllMandiPrices(): Promise<
 }
 
 // ============================================================
-// GET ALL PRICES FOR ONE MANDI
+// GET PRICES FOR MANDI
 // ============================================================
 
 export async function getMandiPrices(
@@ -163,7 +243,8 @@ export async function getMandiPrices(
     `${MANDI_PRICES_PATH}/${mandiId}`
   );
 
-  const snapshot = await get(mandiRef);
+  const snapshot =
+    await get(mandiRef);
 
   if (!snapshot.exists()) {
     return [];
@@ -179,7 +260,7 @@ export async function getMandiPrices(
 }
 
 // ============================================================
-// GET ALL PRICES FOR ONE CROP
+// GET PRICES FOR CROP
 // ============================================================
 
 export async function getCropMandiPrices(
@@ -188,46 +269,16 @@ export async function getCropMandiPrices(
   const allPrices =
     await getAllMandiPrices();
 
-  return Object.values(allPrices).filter(
-    (price) => price.cropId === cropId
+  return Object.values(
+    allPrices
+  ).filter(
+    (price) =>
+      price.cropId === cropId
   );
 }
 
 // ============================================================
 // SAVE MANDI PRICE
-// ============================================================
-//
-// This function:
-// 1. Updates current mandi price.
-// 2. Creates a history record.
-//
-// Firebase:
-//
-// mandiPrices
-//   └── mandiId
-//        └── cropId
-//             ├── min
-//             ├── modal
-//             ├── max
-//             ├── unit
-//             ├── marketDate
-//             ├── updatedAt
-//             ├── updatedBy
-//             └── source
-//
-// mandiPriceHistory
-//   └── mandiId
-//        └── cropId
-//             └── historyId
-//                  ├── min
-//                  ├── modal
-//                  ├── max
-//                  ├── unit
-//                  ├── marketDate
-//                  ├── updatedAt
-//                  ├── updatedBy
-//                  └── source
-//
 // ============================================================
 
 export async function saveMandiPrice(
@@ -238,11 +289,15 @@ export async function saveMandiPrice(
   // ----------------------------------------------------------
 
   if (!input.mandiId) {
-    throw new Error("Mandi ID is required.");
+    throw new Error(
+      "Mandi ID is required."
+    );
   }
 
   if (!input.cropId) {
-    throw new Error("Crop ID is required.");
+    throw new Error(
+      "Crop ID is required."
+    );
   }
 
   if (!input.marketDate) {
@@ -257,73 +312,84 @@ export async function saveMandiPrice(
     );
   }
 
-  if (
-    !Number.isFinite(input.min) ||
-    !Number.isFinite(input.modal) ||
-    !Number.isFinite(input.max)
-  ) {
-    throw new Error(
-      "Invalid mandi price values."
-    );
-  }
-
-  if (
-    input.min < 0 ||
-    input.modal < 0 ||
-    input.max < 0
-  ) {
-    throw new Error(
-      "Mandi prices cannot be negative."
-    );
-  }
-
-  if (
-    input.min > input.modal ||
-    input.modal > input.max
-  ) {
-    throw new Error(
-      "Price must satisfy Min ≤ Modal ≤ Max."
-    );
-  }
+  validatePriceValues(
+    input.min,
+    input.modal,
+    input.max
+  );
 
   // ----------------------------------------------------------
-  // Prepare current price
+  // Prepare values
   // ----------------------------------------------------------
 
   const now = Date.now();
 
+  const cleanVariety =
+    input.variety?.trim();
+
+  const cleanSource =
+    input.source?.trim();
+
   const mandiPrice: MandiPrice = {
-    mandiId: input.mandiId,
-    cropId: input.cropId,
+    mandiId:
+      input.mandiId,
 
-    min: input.min,
-    modal: input.modal,
-    max: input.max,
+    cropId:
+      input.cropId,
 
-    unit: input.unit ?? "quintal",
+    min:
+      input.min,
 
-    marketDate: input.marketDate,
+    modal:
+      input.modal,
 
-    updatedAt: now,
+    max:
+      input.max,
 
-    updatedBy: input.updatedBy,
+    unit:
+      input.unit?.trim() ||
+      "quintal",
 
-    ...(input.source
-      ? { source: input.source }
+    marketDate:
+      input.marketDate,
+
+    updatedAt:
+      now,
+
+    updatedBy:
+      input.updatedBy,
+
+    ...(cleanVariety
+      ? {
+          variety:
+            cleanVariety,
+        }
       : {}),
+
+    ...(cleanSource
+      ? {
+          source:
+            cleanSource,
+        }
+      : {}),
+
+    manualOverride:
+      input.manualOverride ??
+      false,
   };
 
   // ----------------------------------------------------------
   // Save current price
   // ----------------------------------------------------------
 
-  const currentPriceRef = ref(
-    database,
-    getMandiPricePath(
-      input.mandiId,
-      input.cropId
-    )
-  );
+  const currentPriceRef =
+    ref(
+      database,
+      getMandiPricePath(
+        input.mandiId,
+        input.cropId
+      )
+    );
 
   await set(
     currentPriceRef,
@@ -334,17 +400,17 @@ export async function saveMandiPrice(
   // Save history
   // ----------------------------------------------------------
 
-  const historyParentRef = ref(
-    database,
-    getMandiPriceHistoryPath(
-      input.mandiId,
-      input.cropId
-    )
-  );
+  const historyParentRef =
+    ref(
+      database,
+      getMandiPriceHistoryPath(
+        input.mandiId,
+        input.cropId
+      )
+    );
 
-  const historyRef = push(
-    historyParentRef
-  );
+  const historyRef =
+    push(historyParentRef);
 
   const historyId =
     historyRef.key;
@@ -355,7 +421,8 @@ export async function saveMandiPrice(
     );
   }
 
-  const historyData: MandiPriceHistory = {
+  const historyData:
+    MandiPriceHistory = {
     ...mandiPrice,
     historyId,
   };
@@ -371,14 +438,6 @@ export async function saveMandiPrice(
 // ============================================================
 // UPDATE MANDI PRICE
 // ============================================================
-//
-// Updates current price AND creates a complete history record.
-//
-// The existing price is first loaded and merged with the
-// supplied updates so that the history record always contains
-// the complete mandi price.
-//
-// ============================================================
 
 export async function updateMandiPrice(
   mandiId: string,
@@ -390,33 +449,33 @@ export async function updateMandiPrice(
     >
   >
 ): Promise<void> {
-  // ----------------------------------------------------------
-  // Validation
-  // ----------------------------------------------------------
-
   if (!mandiId) {
-    throw new Error("Mandi ID is required.");
+    throw new Error(
+      "Mandi ID is required."
+    );
   }
 
   if (!cropId) {
-    throw new Error("Crop ID is required.");
+    throw new Error(
+      "Crop ID is required."
+    );
   }
 
   // ----------------------------------------------------------
-  // Get existing price
+  // Get existing record
   // ----------------------------------------------------------
 
-  const priceRef = ref(
-    database,
-    getMandiPricePath(
-      mandiId,
-      cropId
-    )
-  );
+  const priceRef =
+    ref(
+      database,
+      getMandiPricePath(
+        mandiId,
+        cropId
+      )
+    );
 
-  const snapshot = await get(
-    priceRef
-  );
+  const snapshot =
+    await get(priceRef);
 
   if (!snapshot.exists()) {
     throw new Error(
@@ -428,13 +487,28 @@ export async function updateMandiPrice(
     snapshot.val() as MandiPrice;
 
   // ----------------------------------------------------------
-  // Prepare complete updated price
+  // Clean optional values
+  // ----------------------------------------------------------
+
+  const cleanVariety =
+    updates.variety !== undefined
+      ? updates.variety?.trim()
+      : undefined;
+
+  const cleanSource =
+    updates.source !== undefined
+      ? updates.source?.trim()
+      : undefined;
+
+  // ----------------------------------------------------------
+  // Build updated record
   // ----------------------------------------------------------
 
   const now = Date.now();
 
   const updatedPrice: MandiPrice = {
     mandiId,
+
     cropId,
 
     min:
@@ -450,91 +524,217 @@ export async function updateMandiPrice(
       existingPrice.max,
 
     unit:
-      updates.unit ??
-      existingPrice.unit ??
+      updates.unit?.trim() ||
+      existingPrice.unit ||
       "quintal",
 
     marketDate:
       updates.marketDate ??
       existingPrice.marketDate,
 
-    updatedAt: now,
+    updatedAt:
+      now,
 
     updatedBy:
       updates.updatedBy ??
       existingPrice.updatedBy,
 
+    // ========================================================
+    // Variety
+    // ========================================================
+
+    ...(updates.variety !== undefined
+      ? cleanVariety
+        ? {
+            variety:
+              cleanVariety,
+          }
+        : {}
+      : existingPrice.variety
+        ? {
+            variety:
+              existingPrice.variety,
+          }
+        : {}),
+
+    // ========================================================
+    // Source
+    // ========================================================
+
     ...(updates.source !== undefined
-      ? updates.source
-        ? { source: updates.source }
+      ? cleanSource
+        ? {
+            source:
+              cleanSource,
+          }
         : {}
       : existingPrice.source
-        ? { source: existingPrice.source }
+        ? {
+            source:
+              existingPrice.source,
+          }
+        : {}),
+
+    // ========================================================
+    // Manual override
+    // ========================================================
+
+    manualOverride:
+      updates.manualOverride ??
+      existingPrice.manualOverride ??
+      false,
+
+    // ========================================================
+    // Preserve data.gov.in metadata
+    // ========================================================
+
+    ...(updates.apiUpdatedAt !==
+    undefined
+      ? {
+          apiUpdatedAt:
+            updates.apiUpdatedAt,
+        }
+      : existingPrice.apiUpdatedAt !==
+          undefined
+        ? {
+            apiUpdatedAt:
+              existingPrice.apiUpdatedAt,
+          }
+        : {}),
+
+    ...(updates.apiResourceId !==
+    undefined
+      ? {
+          apiResourceId:
+            updates.apiResourceId,
+        }
+      : existingPrice.apiResourceId
+        ? {
+            apiResourceId:
+              existingPrice.apiResourceId,
+          }
+        : {}),
+
+    ...(updates.apiState !==
+    undefined
+      ? {
+          apiState:
+            updates.apiState,
+        }
+      : existingPrice.apiState
+        ? {
+            apiState:
+              existingPrice.apiState,
+          }
+        : {}),
+
+    ...(updates.apiDistrict !==
+    undefined
+      ? {
+          apiDistrict:
+            updates.apiDistrict,
+        }
+      : existingPrice.apiDistrict
+        ? {
+            apiDistrict:
+              existingPrice.apiDistrict,
+          }
+        : {}),
+
+    ...(updates.apiMarket !==
+    undefined
+      ? {
+          apiMarket:
+            updates.apiMarket,
+        }
+      : existingPrice.apiMarket
+        ? {
+            apiMarket:
+              existingPrice.apiMarket,
+          }
+        : {}),
+
+    ...(updates.apiCommodity !==
+    undefined
+      ? {
+          apiCommodity:
+            updates.apiCommodity,
+        }
+      : existingPrice.apiCommodity
+        ? {
+            apiCommodity:
+              existingPrice.apiCommodity,
+          }
+        : {}),
+
+    ...(updates.apiVariety !==
+    undefined
+      ? {
+          apiVariety:
+            updates.apiVariety,
+        }
+      : existingPrice.apiVariety
+        ? {
+            apiVariety:
+              existingPrice.apiVariety,
+          }
+        : {}),
+
+    ...(updates.apiGrade !==
+    undefined
+      ? {
+          apiGrade:
+            updates.apiGrade,
+        }
+      : existingPrice.apiGrade
+        ? {
+            apiGrade:
+              existingPrice.apiGrade,
+          }
         : {}),
   };
 
   // ----------------------------------------------------------
-  // Validate complete updated price
+  // Validation
   // ----------------------------------------------------------
 
-  if (!updatedPrice.marketDate) {
+  if (
+    !updatedPrice.marketDate
+  ) {
     throw new Error(
       "Market date is required."
     );
   }
 
-  if (!updatedPrice.updatedBy) {
+  if (
+    !updatedPrice.updatedBy
+  ) {
     throw new Error(
       "Updated by user ID is required."
     );
   }
 
-  if (
-    !Number.isFinite(updatedPrice.min) ||
-    !Number.isFinite(updatedPrice.modal) ||
-    !Number.isFinite(updatedPrice.max)
-  ) {
-    throw new Error(
-      "Invalid mandi price values."
-    );
-  }
-
-  if (
-    updatedPrice.min < 0 ||
-    updatedPrice.modal < 0 ||
-    updatedPrice.max < 0
-  ) {
-    throw new Error(
-      "Mandi prices cannot be negative."
-    );
-  }
-
-  if (
-    updatedPrice.min >
-      updatedPrice.modal ||
-    updatedPrice.modal >
-      updatedPrice.max
-  ) {
-    throw new Error(
-      "Price must satisfy Min ≤ Modal ≤ Max."
-    );
-  }
-
-  // ----------------------------------------------------------
-  // Create history reference
-  // ----------------------------------------------------------
-
-  const historyParentRef = ref(
-    database,
-    getMandiPriceHistoryPath(
-      mandiId,
-      cropId
-    )
+  validatePriceValues(
+    updatedPrice.min,
+    updatedPrice.modal,
+    updatedPrice.max
   );
 
-  const historyRef = push(
-    historyParentRef
-  );
+  // ----------------------------------------------------------
+  // Create history
+  // ----------------------------------------------------------
+
+  const historyParentRef =
+    ref(
+      database,
+      getMandiPriceHistoryPath(
+        mandiId,
+        cropId
+      )
+    );
+
+  const historyRef =
+    push(historyParentRef);
 
   const historyId =
     historyRef.key;
@@ -545,19 +745,24 @@ export async function updateMandiPrice(
     );
   }
 
-  const historyData: MandiPriceHistory = {
+  const historyData:
+    MandiPriceHistory = {
     ...updatedPrice,
     historyId,
   };
 
   // ----------------------------------------------------------
-  // Save current + history
+  // Save current price
   // ----------------------------------------------------------
 
-  await update(
+  await set(
     priceRef,
     updatedPrice
   );
+
+  // ----------------------------------------------------------
+  // Save history
+  // ----------------------------------------------------------
 
   await set(
     historyRef,
@@ -566,7 +771,7 @@ export async function updateMandiPrice(
 }
 
 // ============================================================
-// REALTIME SINGLE PRICE
+// REALTIME PRICE
 // ============================================================
 
 export function subscribeToMandiPrice(
@@ -576,13 +781,14 @@ export function subscribeToMandiPrice(
     price: MandiPrice | null
   ) => void
 ): () => void {
-  const priceRef = ref(
-    database,
-    getMandiPricePath(
-      mandiId,
-      cropId
-    )
-  );
+  const priceRef =
+    ref(
+      database,
+      getMandiPricePath(
+        mandiId,
+        cropId
+      )
+    );
 
   return onValue(
     priceRef,
@@ -600,24 +806,24 @@ export function subscribeToMandiPrice(
 }
 
 // ============================================================
-// GET MANDI PRICE HISTORY
+// GET HISTORY
 // ============================================================
 
 export async function getMandiPriceHistory(
   mandiId: string,
   cropId: string
 ): Promise<MandiPriceHistory[]> {
-  const historyRef = ref(
-    database,
-    getMandiPriceHistoryPath(
-      mandiId,
-      cropId
-    )
-  );
+  const historyRef =
+    ref(
+      database,
+      getMandiPriceHistoryPath(
+        mandiId,
+        cropId
+      )
+    );
 
-  const snapshot = await get(
-    historyRef
-  );
+  const snapshot =
+    await get(historyRef);
 
   if (!snapshot.exists()) {
     return [];
@@ -626,10 +832,14 @@ export async function getMandiPriceHistory(
   const data =
     snapshot.val() as Record<
       string,
-      Omit<MandiPriceHistory, "historyId">
+      Omit<
+        MandiPriceHistory,
+        "historyId"
+      >
     >;
 
-  const history: MandiPriceHistory[] =
+  const history:
+    MandiPriceHistory[] =
     Object.entries(data).map(
       ([historyId, item]) => ({
         historyId,
@@ -637,10 +847,10 @@ export async function getMandiPriceHistory(
       })
     );
 
-  // Newest first.
   history.sort(
     (a, b) =>
-      b.updatedAt - a.updatedAt
+      b.updatedAt -
+      a.updatedAt
   );
 
   return history;

@@ -16,6 +16,7 @@ import {
   saveMandiPrice,
   updateMandiPrice,
   subscribeToMandiPrice,
+  type MandiPrice,
 } from "@/lib/mandiPriceService";
 
 // ============================================================
@@ -67,6 +68,29 @@ const CROP_CATEGORIES: CropCategory[] = [
 ];
 
 // ============================================================
+// PRICE SOURCES
+// ============================================================
+
+const PRICE_SOURCES = [
+  {
+    id: "Coordinator",
+    name: "Coordinator",
+  },
+  {
+    id: "data.gov.in",
+    name: "data.gov.in",
+  },
+  {
+    id: "Mandi Board",
+    name: "Mandi Board",
+  },
+  {
+    id: "APMC",
+    name: "APMC",
+  },
+];
+
+// ============================================================
 // HELPERS
 // ============================================================
 
@@ -114,11 +138,15 @@ export default function MandiPricesPage() {
   const [marketDate, setMarketDate] =
     useState(getTodayDate());
 
+  const [variety, setVariety] = useState("");
+
   const [minPrice, setMinPrice] = useState("");
   const [modalPrice, setModalPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
   const [unit, setUnit] = useState("quintal");
+
+  const [source, setSource] = useState("Coordinator");
 
   // ==========================================================
   // UI STATE
@@ -137,7 +165,7 @@ export default function MandiPricesPage() {
   // ==========================================================
 
   const [existingPrice, setExistingPrice] =
-    useState<any | null>(null);
+    useState<MandiPrice | null>(null);
 
   // ==========================================================
   // AUTH LISTENER
@@ -269,11 +297,15 @@ export default function MandiPricesPage() {
 
     setMarketDate(getTodayDate());
 
+    setVariety("");
+
     setMinPrice("");
     setModalPrice("");
     setMaxPrice("");
 
     setUnit("quintal");
+
+    setSource("Coordinator");
   }
 
   // ==========================================================
@@ -380,7 +412,7 @@ export default function MandiPricesPage() {
       subscribeToMandiPrice(
         selectedMandiId,
         selectedCropId,
-        (price: any) => {
+        (price) => {
           setLoadingPrice(false);
 
           if (price) {
@@ -389,6 +421,10 @@ export default function MandiPricesPage() {
             setMarketDate(
               price.marketDate ||
                 getTodayDate()
+            );
+
+            setVariety(
+              price.variety ?? ""
             );
 
             setMinPrice(
@@ -412,6 +448,10 @@ export default function MandiPricesPage() {
             setUnit(
               price.unit || "quintal"
             );
+
+            setSource(
+              price.source || "Coordinator"
+            );
           } else {
             setExistingPrice(null);
 
@@ -419,11 +459,15 @@ export default function MandiPricesPage() {
               getTodayDate()
             );
 
+            setVariety("");
+
             setMinPrice("");
             setModalPrice("");
             setMaxPrice("");
 
             setUnit("quintal");
+
+            setSource("Coordinator");
           }
         }
       );
@@ -515,6 +559,19 @@ export default function MandiPricesPage() {
     }
 
     // --------------------------------------------------------
+    // PRICE SOURCE
+    // --------------------------------------------------------
+    //
+    // IMPORTANT:
+    // A Coordinator save is always treated as a manual
+    // override. Therefore the Firebase record will use
+    // source = "Coordinator".
+    //
+    // --------------------------------------------------------
+
+    const coordinatorSource = "Coordinator";
+
+    // --------------------------------------------------------
     // PRICE VALIDATION
     // --------------------------------------------------------
 
@@ -603,6 +660,13 @@ export default function MandiPricesPage() {
     }
 
     // --------------------------------------------------------
+    // CLEAN INPUT
+    // --------------------------------------------------------
+
+    const cleanVariety =
+      variety.trim();
+
+    // --------------------------------------------------------
     // START SAVE
     // --------------------------------------------------------
 
@@ -610,53 +674,38 @@ export default function MandiPricesPage() {
 
     try {
       // ======================================================
-      // IMPORTANT:
-      // updatedBy = Firebase Auth user's UID
-      // ======================================================
-
-      const priceData = {
-        mandiId: selectedMandi.id,
-        cropId: selectedCrop.id,
-
-        marketDate,
-
-        min: numericMin,
-        modal: numericModal,
-        max: numericMax,
-
-        unit,
-
-        updatedAt: getTodayDate(),
-
-        updatedBy: user.uid,
-      };
-
-      let saveResult = false;
-
-      // ======================================================
       // UPDATE EXISTING PRICE
       // ======================================================
 
       if (existingPrice) {
-          await updateMandiPrice(
-            selectedMandi.id,
-            selectedCrop.id,
-            {
-              marketDate,
+        await updateMandiPrice(
+          selectedMandi.id,
+          selectedCrop.id,
+          {
+            marketDate,
 
-              min: numericMin,
-              modal: numericModal,
-              max: numericMax,
+            variety:
+              cleanVariety || undefined,
 
-              unit,
+            min: numericMin,
+            modal: numericModal,
+            max: numericMax,
 
-              updatedAt:
-                getTodayDate(),
+            unit,
 
-              updatedBy: user.uid,
-            } as any
-          );
-		  saveResult = true;
+            source:
+              coordinatorSource,
+
+            updatedBy:
+              user.uid,
+
+            manualOverride: true,
+          }
+        );
+
+        setSuccess(
+          "Mandi price updated successfully."
+        );
       }
 
       // ======================================================
@@ -664,32 +713,34 @@ export default function MandiPricesPage() {
       // ======================================================
 
       else {
-          await saveMandiPrice(
-            priceData as any
-          );
-		  saveResult = true;
-      }
+        await saveMandiPrice({
+          mandiId: selectedMandi.id,
+          cropId: selectedCrop.id,
 
-      // ======================================================
-      // SAVE FAILED
-      // ======================================================
+          marketDate,
 
-      if (!saveResult) {
-        setError(
-          "Failed to save mandi price. Please try again."
+          variety:
+            cleanVariety || undefined,
+
+          min: numericMin,
+          modal: numericModal,
+          max: numericMax,
+
+          unit,
+
+          source:
+            coordinatorSource,
+
+          updatedBy:
+            user.uid,
+
+          manualOverride: true,
+        });
+
+        setSuccess(
+          "Mandi price saved successfully."
         );
-        return;
       }
-
-      // ======================================================
-      // SUCCESS
-      // ======================================================
-
-      setSuccess(
-        existingPrice
-          ? "Mandi price updated successfully."
-          : "Mandi price saved successfully."
-      );
     } catch (err) {
       console.error(
         "Failed to save mandi price:",
@@ -847,17 +898,17 @@ export default function MandiPricesPage() {
                   </option>
 
                   {STATES.map((state) => (
-					  <option
-						key={state.id}
-						value={state.id}
-						disabled={!state.supported}
-					  >
-						{state.name} - {state.nameHindi}
-						{!state.supported
-						  ? " (Coming Soon)"
-						  : ""}
-					  </option>
-				  ))}
+                    <option
+                      key={state.id}
+                      value={state.id}
+                      disabled={!state.supported}
+                    >
+                      {state.name} - {state.nameHindi}
+                      {!state.supported
+                        ? " (Coming Soon)"
+                        : ""}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -1100,6 +1151,34 @@ export default function MandiPricesPage() {
                 </p>
               </div>
 
+              {/* VARIETY */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700">
+                  Variety
+                </label>
+
+                <input
+                  type="text"
+                  value={variety}
+                  onChange={(event) =>
+                    setVariety(
+                      event.target.value
+                    )
+                  }
+                  disabled={
+                    !selectedCropId
+                  }
+                  placeholder="Enter crop variety"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:cursor-not-allowed disabled:bg-slate-50"
+                />
+
+                <p className="mt-1 text-xs text-slate-400">
+                  Optional. Enter the variety reported
+                  in the market.
+                </p>
+              </div>
+
               {/* UNIT */}
 
               <div>
@@ -1131,6 +1210,44 @@ export default function MandiPricesPage() {
                     Ton
                   </option>
                 </select>
+              </div>
+
+              {/* SOURCE */}
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700">
+                  Source
+                </label>
+
+                <select
+                  value={source}
+                  onChange={(event) =>
+                    setSource(
+                      event.target.value
+                    )
+                  }
+                  disabled={
+                    !selectedCropId
+                  }
+                  className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-green-500 focus:ring-2 focus:ring-green-100 disabled:cursor-not-allowed disabled:bg-slate-50"
+                >
+                  {PRICE_SOURCES.map(
+                    (priceSource) => (
+                      <option
+                        key={priceSource.id}
+                        value={priceSource.id}
+                      >
+                        {priceSource.name}
+                      </option>
+                    )
+                  )}
+                </select>
+
+                <p className="mt-1 text-xs text-slate-400">
+                  API data is automatically marked as
+                  data.gov.in. Coordinator submissions
+                  are stored as manual overrides.
+                </p>
               </div>
 
               {/* MIN PRICE */}
@@ -1250,46 +1367,85 @@ export default function MandiPricesPage() {
                 </div>
 
                 {existingPrice ? (
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-xs text-slate-400">
-                        Min
-                      </p>
+                  <>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-xs text-slate-400">
+                          Min
+                        </p>
 
-                      <p className="mt-1 text-lg font-semibold text-slate-800">
-                        ₹
-                        {
-                          existingPrice.min
-                        }
-                      </p>
+                        <p className="mt-1 text-lg font-semibold text-slate-800">
+                          ₹
+                          {existingPrice.min}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-slate-400">
+                          Modal
+                        </p>
+
+                        <p className="mt-1 text-lg font-semibold text-green-700">
+                          ₹
+                          {existingPrice.modal}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs text-slate-400">
+                          Max
+                        </p>
+
+                        <p className="mt-1 text-lg font-semibold text-slate-800">
+                          ₹
+                          {existingPrice.max}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <p className="text-xs text-slate-400">
-                        Modal
-                      </p>
+                    <div className="mt-4 grid gap-3 border-t border-slate-200 pt-4 text-xs sm:grid-cols-3">
+                      <div>
+                        <span className="text-slate-400">
+                          Variety
+                        </span>
 
-                      <p className="mt-1 text-lg font-semibold text-green-700">
-                        ₹
-                        {
-                          existingPrice.modal
-                        }
-                      </p>
+                        <p className="mt-1 font-medium text-slate-700">
+                          {existingPrice.variety ||
+                            "Not specified"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-slate-400">
+                          Source
+                        </span>
+
+                        <p className="mt-1 font-medium text-slate-700">
+                          {existingPrice.source ||
+                            "Coordinator"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <span className="text-slate-400">
+                          Market Date
+                        </span>
+
+                        <p className="mt-1 font-medium text-slate-700">
+                          {existingPrice.marketDate ||
+                            "Not specified"}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <p className="text-xs text-slate-400">
-                        Max
-                      </p>
-
-                      <p className="mt-1 text-lg font-semibold text-slate-800">
-                        ₹
-                        {
-                          existingPrice.max
-                        }
-                      </p>
-                    </div>
-                  </div>
+                    {existingPrice.manualOverride && (
+                      <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                        Manual Coordinator override is
+                        active. Automatic API sync will
+                        not replace this price.
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <p className="text-sm text-slate-500">
                     No price has been entered yet for

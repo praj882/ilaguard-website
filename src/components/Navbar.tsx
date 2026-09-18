@@ -567,7 +567,7 @@ export default function Navbar() {
                     ================================================== */}
 
                     <Link
-                      href="/weather"
+                      href="/crop-advisor/weather"
                       onClick={closeMenus}
                       className="group rounded-xl p-4 transition hover:bg-green-50"
                     >
