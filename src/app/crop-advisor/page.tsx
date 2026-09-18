@@ -65,6 +65,21 @@ export default function CropAdvisorPage() {
               growing conditions.
             </p>
           </Link>
+		  
+		  <Link
+            href="/crop-advisor/weather"
+            className="rounded-2xl bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
+            <div className="mb-4 text-4xl">🌦️</div>
+
+            <h2 className="text-xl font-semibold text-gray-900">
+              Get Weather Forecast Near You
+            </h2>
+
+            <p className="mt-2 text-gray-600">
+              Check local weather to make better crop decisions.
+            </p>
+          </Link>
 
         </div>
       </div>

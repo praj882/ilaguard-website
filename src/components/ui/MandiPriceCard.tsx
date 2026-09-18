@@ -763,6 +763,12 @@ export default function MandiPriceCard() {
                           selectedMandiCrop?.nameHindi
                         }
                       </p>
+					  <p className="text-sm text-gray-500">
+                        Variety:{" "}
+                          {
+                            mandiPrice.variety
+                          }
+                      </p>
 
                       <p className="mt-1 text-sm font-medium text-gray-700">
                         📍{" "}

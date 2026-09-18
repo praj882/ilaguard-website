@@ -3,6 +3,9 @@ export type Mandi = {
   name: string;
   stateName: string;
   districtName: string;
+
+  // Exact market name(s) returned by data.gov.in
+  dataGovMarketNames?: string[];
 };
 
 /*
@@ -24,6 +27,9 @@ export const MANDIS: Mandi[] = [
     name: "Samastipur Mandi",
     stateName: "Bihar",
     districtName: "Samastipur",
+	dataGovMarketNames: [
+      "Samastipur APMC",
+    ],
   },
 
   {
@@ -225,6 +231,28 @@ export const MANDIS: Mandi[] = [
     districtName: "West Champaran",
   },
   // ============================================================
+  // Kishanganj
+  // ============================================================
+
+  {
+    id: "bahadurganj",
+    name: "Bahadurganj Mandi",
+    stateName: "Bihar",
+    districtName: "Kishanganj",
+  },
+  
+  // ============================================================
+  // Supaul
+  // ============================================================
+
+  {
+    id: "supaul",
+    name: "Supaul APMC",
+    stateName: "Bihar",
+    districtName: "Supaul",
+  },
+  
+  // ============================================================
   // WEST BENGAL
   // stateId: 04
   //
@@ -297,6 +325,9 @@ export const MANDIS: Mandi[] = [
     name: "Siliguri Principal Market Yard",
     stateName: "West Bengal",
     districtName: "Darjeeling",
+	dataGovMarketNames: [
+      "Siliguri APMC",
+    ],
   },
 
   // ============================================================
