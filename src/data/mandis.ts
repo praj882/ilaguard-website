@@ -124,7 +124,65 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Patna",
   },
+  {
+    id: "musallahpur",
+    name: "Musallahpur",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  {
+    id: "fatuha",
+    name: "Fatuha",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  {
+    id: "danapur",
+    name: "Danapur",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  {
+    id: "bihta",
+    name: "Bihta",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  {
+    id: "barh",
+    name: "Barh",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  {
+    id: "mokama",
+    name: "Mokama",
+    stateName: "Bihar",
+    districtName: "Patna",
+  },
+  // ============================================================
+  // NALANDA
+  // ============================================================
 
+  {
+    id: "bihar-sharif",
+    name: "Bihar Sharif",
+    stateName: "Bihar",
+    districtName: "Nalanda",
+  },
+
+  // ============================================================
+  // JEHANABAD
+  // ============================================================
+
+  {
+    id: "jehanabad",
+    name: "Jehanabad",
+    stateName: "Bihar",
+    districtName: "Jehanabad",
+  },
+  
+  
   // ============================================================
   // BEGUSARAI
   // ============================================================
@@ -146,7 +204,89 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Gaya",
   },
+  // ============================================================
+  // AURANGABAD
+  // ============================================================
 
+  {
+    id: "daud-nagar",
+    name: "Daud Nagar",
+    stateName: "Bihar",
+    districtName: "Aurangabad",
+  },
+
+  // ============================================================
+  // BHOJPUR
+  // ============================================================
+
+  {
+    id: "aarah",
+    name: "Aarah",
+    stateName: "Bihar",
+    districtName: "Bhojpur",
+  },
+  {
+    id: "bihiyaan",
+    name: "Bihiyaan",
+    stateName: "Bihar",
+    districtName: "Bhojpur",
+  },
+  // ============================================================
+  // BUXAR
+  // ============================================================
+
+  {
+    id: "buxar",
+    name: "Buxar",
+    stateName: "Bihar",
+    districtName: "Buxar",
+  },
+
+  // ============================================================
+  // ROHTAS
+  // ============================================================
+
+  {
+    id: "sasaram",
+    name: "Sasaram",
+    stateName: "Bihar",
+    districtName: "Rohtas",
+  },
+  {
+    id: "nokha",
+    name: "Nokha",
+    stateName: "Bihar",
+    districtName: "Rohtas",
+  },
+  {
+    id: "natwaar",
+    name: "Natwaar",
+    stateName: "Bihar",
+    districtName: "Rohtas",
+  },
+
+  // ============================================================
+  // KAIMUR
+  // ============================================================
+
+  {
+    id: "mohania",
+    name: "Mohania",
+    stateName: "Bihar",
+    districtName: "Kaimur",
+  },
+
+  // ============================================================
+  // SARAN
+  // ============================================================
+
+  {
+    id: "chhapra",
+    name: "Chhapra",
+    stateName: "Bihar",
+    districtName: "Saran",
+  },
+  
   // ============================================================
   // BHAGALPUR
   // ============================================================
@@ -157,7 +297,63 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Bhagalpur",
   },
+  {
+    id: "bihpur",
+    name: "bihpur Mandi",
+    stateName: "Bihar",
+    districtName: "Bhagalpur",
+  },
+  {
+    id: "naugachhia",
+    name: "Naugachhia",
+    stateName: "Bihar",
+    districtName: "Bhagalpur",
+  },
+  
+  // ============================================================
+  // MUNGER
+  // ============================================================
 
+  {
+    id: "munger",
+    name: "Munger",
+    stateName: "Bihar",
+    districtName: "Munger",
+  },
+
+  // ============================================================
+  // LAKHISARAI
+  // ============================================================
+
+  {
+    id: "lakhisarai",
+    name: "Lakhisarai",
+    stateName: "Bihar",
+    districtName: "Lakhisarai",
+  },
+
+  // ============================================================
+  // MADHEPURA
+  // ============================================================
+
+  {
+    id: "singheshwar-sthan",
+    name: "Singheshwar Sthan",
+    stateName: "Bihar",
+    districtName: "Madhepura",
+  },
+  {
+    id: "murliganj",
+    name: "Murliganj",
+    stateName: "Bihar",
+    districtName: "Madhepura",
+  },
+  {
+    id: "bihariganj",
+    name: "Bihariganj",
+    stateName: "Bihar",
+    districtName: "Madhepura",
+  },
   // ============================================================
   // PURNIA
   // ============================================================
@@ -168,7 +364,40 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Purnia",
   },
+  {
+    id: "gulabbagh",
+    name: "GulabBagh",
+    stateName: "Bihar",
+    districtName: "Purnia",
+  },
+  {
+    id: "kasba",
+    name: "Kasba",
+    stateName: "Bihar",
+    districtName: "Purnia",
+  },
+  {
+    id: "banmankhi",
+    name: "Banmankhi",
+    stateName: "Bihar",
+    districtName: "Purnia",
+  },
+  // ============================================================
+  // ARARIA
+  // ============================================================
 
+  {
+    id: "forbesganj",
+    name: "Forbesganj",
+    stateName: "Bihar",
+    districtName: "Araria",
+  },
+  {
+    id: "araria",
+    name: "Araria",
+    stateName: "Bihar",
+    districtName: "Araria",
+  },
   // ============================================================
   // KATIHAR
   // ============================================================
@@ -201,7 +430,24 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Madhubani",
   },
-
+  {
+    id: "jhanjharpur",
+    name: "Jhanjharpur",
+    stateName: "Bihar",
+    districtName: "Madhubani",
+  },
+  {
+    id: "ghoghardiha",
+    name: "Ghoghardiha",
+    stateName: "Bihar",
+    districtName: "Madhubani",
+  },
+  {
+    id: "jainagar",
+    name: "Jainagar",
+    stateName: "Bihar",
+    districtName: "Madhubani",
+  },
   // ============================================================
   // SITAMARHI
   // ============================================================
@@ -209,6 +455,18 @@ export const MANDIS: Mandi[] = [
   {
     id: "sitamarhi",
     name: "Sitamarhi Mandi",
+    stateName: "Bihar",
+    districtName: "Sitamarhi",
+  },
+  {
+    id: "bairganiya",
+    name: "Bairganiya",
+    stateName: "Bihar",
+    districtName: "Sitamarhi",
+  },
+  {
+    id: "pupri",
+    name: "Pupri",
     stateName: "Bihar",
     districtName: "Sitamarhi",
   },
@@ -223,10 +481,33 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "East Champaran",
   },
-
+  {
+    id: "raxaul ",
+    name: "Raxaul  Mandi",
+    stateName: "Bihar",
+    districtName: "East Champaran",
+  },
+  {
+    id: "chakia",
+    name: "Chakia",
+    stateName: "Bihar",
+    districtName: "East Champaran",
+  },
+  {
+    id: "narkatiaganj",
+    name: "Narkatiaganj",
+    stateName: "Bihar",
+    districtName: "West Champaran",
+  },
   {
     id: "bettiah",
-    name: "Bettiah Mandi",
+    name: "Bettiah",
+    stateName: "Bihar",
+    districtName: "West Champaran",
+  },
+  {
+    id: "chanpatia",
+    name: "Chanpatia",
     stateName: "Bihar",
     districtName: "West Champaran",
   },
@@ -235,10 +516,33 @@ export const MANDIS: Mandi[] = [
   // ============================================================
 
   {
-    id: "bahadurganj",
-    name: "Bahadurganj Mandi",
+    id: "kishanganj",
+    name: "Kishanganj",
     stateName: "Bihar",
     districtName: "Kishanganj",
+  },
+  {
+    id: "bahadurganj",
+    name: "Bahadurganj",
+    stateName: "Bihar",
+    districtName: "Kishanganj",
+  },
+  {
+    id: "thakurganj",
+    name: "Thakurganj",
+    stateName: "Bihar",
+    districtName: "Kishanganj",
+  },
+  
+  // ============================================================
+  // KHAGARIA
+  // ============================================================
+
+  {
+    id: "khagaria",
+    name: "Khagaria",
+    stateName: "Bihar",
+    districtName: "Khagaria",
   },
   
   // ============================================================
@@ -251,7 +555,18 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Supaul",
   },
-  
+  {
+    id: "triveniganj",
+    name: "Triveniganj APMC",
+    stateName: "Bihar",
+    districtName: "Supaul",
+  },
+  {
+    id: "birpur",
+    name: "Birpur APMC",
+    stateName: "Bihar",
+    districtName: "Supaul",
+  },
   // ============================================================
   // WEST BENGAL
   // stateId: 04
