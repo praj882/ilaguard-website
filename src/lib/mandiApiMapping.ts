@@ -113,6 +113,19 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     districtName:
       "Supaul",
   },
+  
+  {
+    mandiId: "madhubani",
+
+    apiMarketNames: [
+      "Madhubani APMC",
+      "Madhubani",
+      "Madhubani Mandi",
+    ],
+
+    districtName:
+      "Madhubani",
+  },
 ];
 
 // ============================================================
