@@ -1,0 +1,35 @@
+name: IlaGuard Mandi Price Sync
+
+on:
+  schedule:
+    # Every 6 hours
+    - cron: "30 */6 * * *"
+
+  # Allows manual execution from GitHub
+  workflow_dispatch:
+
+jobs:
+  mandi-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Sync mandi prices
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          echo "Starting IlaGuard mandi price sync..."
+
+          HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "https://www.ilaguard.com/api/mandi/sync")
+
+          echo "HTTP Status: ${HTTP_STATUS}"
+          echo "Response:"
+          cat response.json
+
+          if [ "${HTTP_STATUS}" -lt 200 ] || [ "${HTTP_STATUS}" -ge 300 ]; then
+            echo "Mandi sync failed."
+            exit 1
+          fi
+
+          echo "Mandi sync completed successfully."
