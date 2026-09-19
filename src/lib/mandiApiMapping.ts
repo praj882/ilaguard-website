@@ -71,6 +71,80 @@ export type MandiApiMapping = {
 // ============================================================
 
 export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
+  // ------------------------------------------------------------
+  // PATNA
+  // ------------------------------------------------------------
+  {
+    mandiId: "musallahpur",
+    apiMarketNames: [
+      "Musallahpur",
+      "Musallahpur APMC",
+    ],
+    districtName: "Patna",
+  },
+  {
+    mandiId: "fatuha",
+    apiMarketNames: [
+      "Fatuha",
+      "Fatuha APMC",
+    ],
+    districtName: "Patna",
+  },
+  {
+    mandiId: "danapur",
+    apiMarketNames: [
+      "Danapur",
+      "Danapur APMC",
+    ],
+    districtName: "Patna",
+  },
+  {
+    mandiId: "bihta",
+    apiMarketNames: [
+      "Bihta",
+      "Bihta APMC",
+    ],
+    districtName: "Patna",
+  },
+  {
+    mandiId: "barh",
+    apiMarketNames: [
+      "Barh",
+      "Barh APMC",
+    ],
+    districtName: "Patna",
+  },
+  {
+    mandiId: "mokama",
+    apiMarketNames: [
+      "Mokama",
+      "Mokama APMC",
+    ],
+    districtName: "Patna",
+  },
+  // ------------------------------------------------------------
+  // NALANDA
+  // ------------------------------------------------------------
+  {
+    mandiId: "bihar-sharif",
+    apiMarketNames: [
+      "Bihar Sharif",
+      "Bihar Sharif APMC",
+    ],
+    districtName: "Nalanda",
+  },
+  // ------------------------------------------------------------
+  // JEHANABAD
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "jehanabad",
+    apiMarketNames: [
+      "Jehanabad",
+      "Jehanabad APMC",
+    ],
+    districtName: "Jehanabad",
+  },
 
   // ==========================================================
   // BHAGALPUR
@@ -87,8 +161,80 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
 
     districtName: "Bhagalpur",
   },
+  {
+    mandiId: "bhagalpur",
+    apiMarketNames: [
+      "Bhagalpur",
+      "Bhagalpur APMC",
+    ],
+    districtName: "Bhagalpur",
+  },
 
+  {
+    mandiId: "naugachhia",
+    apiMarketNames: [
+      "Naugachhia",
+      "Naugachhia APMC",
+    ],
+    districtName: "Bhagalpur",
+  },
+  // ------------------------------------------------------------
+  // MUNGER
+  // ------------------------------------------------------------
 
+  {
+    mandiId: "munger",
+    apiMarketNames: [
+      "Munger",
+      "Munger APMC",
+    ],
+    districtName: "Munger",
+  },
+
+  // ------------------------------------------------------------
+  // LAKHISARAI
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "lakhisarai",
+    apiMarketNames: [
+      "Lakhisarai",
+      "Lakhisarai APMC",
+    ],
+    districtName: "Lakhisarai",
+  },
+  // ------------------------------------------------------------
+  // MADHEPURA
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "singheshwar-sthan",
+    apiMarketNames: [
+      "Singheshwar Sthan",
+      "Singheshwar Sthan APMC",
+      "Singheshwar",
+      "Singheshwar APMC",
+    ],
+    districtName: "Madhepura",
+  },
+
+  {
+    mandiId: "murliganj",
+    apiMarketNames: [
+      "Murliganj",
+      "Murliganj APMC",
+    ],
+    districtName: "Madhepura",
+  },
+
+  {
+    mandiId: "bihariganj",
+    apiMarketNames: [
+      "Bihariganj",
+      "Bihariganj APMC",
+    ],
+    districtName: "Madhepura",
+  },
   // ==========================================================
   // GAYA
   // ==========================================================
@@ -105,11 +251,139 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     districtName: "Gaya",
   },
 
+  // ------------------------------------------------------------
+  // AURANGABAD
+  // ------------------------------------------------------------
 
+  {
+    mandiId: "daud-nagar",
+    apiMarketNames: [
+      "Daud Nagar",
+      "Daud Nagar APMC",
+      "Daudnagar",
+    ],
+    districtName: "Aurangabad",
+  },
+   // ------------------------------------------------------------
+  // BHOJPUR
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "aarah",
+    apiMarketNames: [
+      "Aarah",
+      "Aarah APMC",
+      "Ara",
+      "Ara APMC",
+    ],
+    districtName: "Bhojpur",
+  },
+
+  {
+    mandiId: "bihiyaan",
+    apiMarketNames: [
+      "Bihiyaan",
+      "Bihiyaan APMC",
+      "Bihiya",
+      "Bihiya APMC",
+    ],
+    districtName: "Bhojpur",
+  },
+  // ------------------------------------------------------------
+  // BUXAR
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "buxar",
+    apiMarketNames: [
+      "Buxar",
+      "Buxar APMC",
+    ],
+    districtName: "Buxar",
+  },
+  // ------------------------------------------------------------
+  // ROHTAS
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "sasaram",
+    apiMarketNames: [
+      "Sasaram",
+      "Sasaram APMC",
+    ],
+    districtName: "Rohtas",
+  },
+
+  {
+    mandiId: "nokha",
+    apiMarketNames: [
+      "Nokha",
+      "Nokha APMC",
+    ],
+    districtName: "Rohtas",
+  },
+
+  {
+    mandiId: "natwaar",
+    apiMarketNames: [
+      "Natwaar",
+      "Natwaar APMC",
+      "Natwar",
+      "Natwar APMC",
+    ],
+    districtName: "Rohtas",
+  },
+  // ------------------------------------------------------------
+  // KAIMUR
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "mohania",
+    apiMarketNames: [
+      "Mohania",
+      "Mohania APMC",
+    ],
+    districtName: "Kaimur",
+  },
+
+  // ------------------------------------------------------------
+  // SARAN
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "chhapra",
+    apiMarketNames: [
+      "Chhapra",
+      "Chhapra APMC",
+    ],
+    districtName: "Saran",
+  },
+  // ------------------------------------------------------------
+  // VAISHALI
+  // ------------------------------------------------------------
+  {
+    mandiId: "hajipur",
+    apiMarketNames: [
+      "Hajipur",
+      "Hajipur APMC",
+    ],
+    districtName: "Vaishali",
+  },
+   // ------------------------------------------------------------
+  // DARBHANGA
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "darbhanga",
+    apiMarketNames: [
+      "Darbhanga",
+      "Darbhanga APMC",
+    ],
+    districtName: "Darbhanga",
+  },
   // ==========================================================
   // MADHUBANI
   // ==========================================================
-
   {
     mandiId: "madhubani",
 
@@ -118,11 +392,88 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
       "Madhubani",
       "Madhubani Mandi",
     ],
-
+    districtName: "Madhubani",
+  },
+  {
+    mandiId: "jhanjharpur",
+    apiMarketNames: [
+      "Jhanjharpur",
+      "Jhanjharpur APMC",
+    ],
+    districtName: "Madhubani",
+  },
+  {
+    mandiId: "ghoghardiha",
+    apiMarketNames: [
+      "Ghoghardiha",
+      "Ghoghardiha APMC",
+    ],
     districtName: "Madhubani",
   },
 
+  {
+    mandiId: "jainagar",
+    apiMarketNames: [
+      "Jainagar",
+      "Jainagar APMC",
+    ],
+    districtName: "Madhubani",
+  },
+  // ------------------------------------------------------------
+  // BEGUSARAI
+  // ------------------------------------------------------------
 
+  {
+    mandiId: "begusarai",
+    apiMarketNames: [
+      "Begusarai",
+      "Begusarai APMC",
+    ],
+    districtName: "Begusarai",
+  },
+   // ------------------------------------------------------------
+  // MUZAFFARPUR
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "muzaffarpur",
+    apiMarketNames: [
+      "Muzaffarpur",
+      "Muzaffarpur APMC",
+    ],
+    districtName: "Muzaffarpur",
+  },
+   // ------------------------------------------------------------
+  // SITAMARHI
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "sitamarhi",
+    apiMarketNames: [
+      "Sitamarhi",
+      "Sitamarhi APMC",
+    ],
+    districtName: "Sitamarhi",
+  },
+
+  {
+    mandiId: "bairganiya",
+    apiMarketNames: [
+      "Bairganiya",
+      "Bairganiya APMC",
+    ],
+    districtName: "Sitamarhi",
+  },
+
+  {
+    mandiId: "pupri",
+    apiMarketNames: [
+      "Pupri",
+      "Pupri APMC",
+    ],
+    districtName: "Sitamarhi",
+  },
+  
   // ==========================================================
   // EAST CHAMPARAN
   // ==========================================================
@@ -151,8 +502,121 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
 
     districtName: "East Champaran",
   },
+  {
+    mandiId: "chakia",
+    apiMarketNames: [
+      "Chakia",
+      "Chakia APMC",
+    ],
+    districtName: "East Champaran",
+  },
 
+  {
+    mandiId: "motihari",
+    apiMarketNames: [
+      "Motihari",
+      "Motihari APMC",
+    ],
+    districtName: "East Champaran",
+  },
+  // ------------------------------------------------------------
+  // WEST CHAMPARAN
+  // ------------------------------------------------------------
 
+  {
+    mandiId: "narkatiaganj",
+    apiMarketNames: [
+      "Narkatiaganj",
+      "Narkatiaganj APMC",
+    ],
+    districtName: "West Champaran",
+  },
+
+  {
+    mandiId: "bettiah",
+    apiMarketNames: [
+      "Bettiah",
+      "Bettiah APMC",
+    ],
+    districtName: "West Champaran",
+  },
+
+  {
+    mandiId: "chanpatia",
+    apiMarketNames: [
+      "Chanpatia",
+      "Chanpatia APMC",
+      "Chanpatiya",
+      "Chanpatiya APMC",
+    ],
+    districtName: "West Champaran",
+  },
+  // ------------------------------------------------------------
+  // PURNIA
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "gulabbagh",
+    apiMarketNames: [
+      "GulabBagh",
+      "Gulab Bagh",
+      "GulabBagh APMC",
+      "Gulab Bagh APMC",
+    ],
+    districtName: "Purnia",
+  },
+
+  {
+    mandiId: "kasba",
+    apiMarketNames: [
+      "Kasba",
+      "Kasba APMC",
+    ],
+    districtName: "Purnia",
+  },
+
+  {
+    mandiId: "banmankhi",
+    apiMarketNames: [
+      "Banmankhi",
+      "Banmankhi APMC",
+    ],
+    districtName: "Purnia",
+  },
+  // ------------------------------------------------------------
+  // ARARIA
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "forbesganj",
+    apiMarketNames: [
+      "Forbesganj",
+      "Forbesganj APMC",
+    ],
+    districtName: "Araria",
+  },
+
+  {
+    mandiId: "araria",
+    apiMarketNames: [
+      "Araria",
+      "Araria APMC",
+    ],
+    districtName: "Araria",
+  },
+  // ------------------------------------------------------------
+  // KATIHAR
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "katihar",
+    apiMarketNames: [
+      "Katihar",
+      "Katihar APMC",
+    ],
+    districtName: "Katihar",
+  },
+  
   // ==========================================================
   // SUPAUL
   // ==========================================================
@@ -276,18 +740,49 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
   // KISHANGANJ - BAHADURGANJ
   // ==========================================================
 
+  // ------------------------------------------------------------
+  // KISHANGANJ
+  // ------------------------------------------------------------
+
   {
-    mandiId: "bahadurganj",
-
+    mandiId: "kishanganj",
     apiMarketNames: [
-      "Bahadurganj",
-      "Bahadurganj APMC",
-      "Bahadurganj Mandi",
+      "Kishanganj",
+      "Kishanganj APMC",
     ],
-
     districtName: "Kishanganj",
   },
 
+  {
+    mandiId: "bahadurganj",
+    apiMarketNames: [
+      "Bahadurganj",
+      "Bahadurganj APMC",
+    ],
+    districtName: "Kishanganj",
+  },
+
+  {
+    mandiId: "thakurganj",
+    apiMarketNames: [
+      "Thakurganj",
+      "Thakurganj APMC",
+    ],
+    districtName: "Kishanganj",
+  },
+  // ------------------------------------------------------------
+  // KHAGARIA
+  // ------------------------------------------------------------
+
+  {
+    mandiId: "khagaria",
+    apiMarketNames: [
+      "Khagaria",
+      "Khagaria APMC",
+    ],
+    districtName: "Khagaria",
+  },
+  
 ];
 
 
