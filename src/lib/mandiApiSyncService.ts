@@ -68,6 +68,10 @@ function findMandiId(
   }
 
   for (const mapping of MANDI_API_MAPPINGS) {
+    // --------------------------------------------------------
+    // MARKET MATCH
+    // --------------------------------------------------------
+
     const marketMatched =
       mapping.apiMarketNames.some(
         (name) =>
@@ -79,14 +83,26 @@ function findMandiId(
       continue;
     }
 
-    if (
-      mapping.districtName &&
-      normalizedDistrict &&
-      normalizeText(
-        mapping.districtName
-      ) !== normalizedDistrict
-    ) {
-      continue;
+    // --------------------------------------------------------
+    // DISTRICT MATCH
+    // --------------------------------------------------------
+
+    if (normalizedDistrict) {
+      const validDistrictNames = [
+        mapping.districtName,
+        ...(mapping.apiDistrictNames ?? []),
+      ];
+
+      const districtMatched =
+        validDistrictNames.some(
+          (name) =>
+            normalizeText(name) ===
+            normalizedDistrict
+        );
+
+      if (!districtMatched) {
+        continue;
+      }
     }
 
     return mapping.mandiId;

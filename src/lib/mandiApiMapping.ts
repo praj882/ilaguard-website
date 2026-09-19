@@ -43,6 +43,10 @@ export type MandiApiMapping = {
    * This MUST match the district name used in districts.ts.
    */
   districtName: string;
+  /**
+   * Optional district names/aliases used by data.gov.in
+   */
+  apiDistrictNames?: string[];
 };
 
 
@@ -357,6 +361,10 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
       "Chhapra APMC",
     ],
     districtName: "Saran",
+	apiDistrictNames: [
+    "Saran",
+    "Chhapra",
+    ],
   },
   // ------------------------------------------------------------
   // VAISHALI
@@ -501,6 +509,10 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     ],
 
     districtName: "East Champaran",
+	apiDistrictNames: [
+    "East Champaran",
+    "East Champaran/ Motihari",
+    ],
   },
   {
     mandiId: "chakia",
@@ -509,6 +521,10 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
       "Chakia APMC",
     ],
     districtName: "East Champaran",
+	apiDistrictNames: [
+    "East Champaran",
+    "East Champaran/ Motihari",
+    ],
   },
 
   {
@@ -518,6 +534,10 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
       "Motihari APMC",
     ],
     districtName: "East Champaran",
+	apiDistrictNames: [
+    "East Champaran",
+    "East Champaran/ Motihari",
+    ],
   },
   // ------------------------------------------------------------
   // WEST CHAMPARAN
