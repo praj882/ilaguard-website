@@ -539,6 +539,18 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     "East Champaran/ Motihari",
     ],
   },
+  {
+    mandiId: "madhuban",
+    apiMarketNames: [
+      "Madhuban",
+      "Madhuban APMC",
+    ],
+    districtName: "East Champaran",
+	apiDistrictNames: [
+    "East Champaran",
+    "East Champaran/ Motihari",
+    ],
+  },
   // ------------------------------------------------------------
   // WEST CHAMPARAN
   // ------------------------------------------------------------
@@ -931,12 +943,15 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
   // ==========================================================
 
   {
-    cropId: "bhindi",
-
+    cropId: "okra",
+    
     apiCommodityNames: [
       "Bhindi(Ladies Finger)",
       "Bhindi (Ladies Finger)",
       "Bhindi",
+      "Lady Finger",
+      "Ladies Finger",
+      "Okra",
     ],
   },
 
