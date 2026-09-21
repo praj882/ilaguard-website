@@ -493,6 +493,13 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "East Champaran",
   },
+  
+  {
+    id: "madhuban",
+    name: "Madhuban",
+    stateName: "Bihar",
+    districtName: "East Champaran",
+  },
   {
     id: "narkatiaganj",
     name: "Narkatiaganj",
