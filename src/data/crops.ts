@@ -47,7 +47,20 @@ export const CROPS: Crop[] = [
     category: "Vegetable",
     icon: "🥔",
   },
-
+  {
+    id: "onion",
+    name: "Onion",
+    nameHindi: "प्याज",
+    category: "Vegetable",
+    icon: "🧅",
+  },
+  {
+    id: "garlic",
+    name: "Garlic",
+    nameHindi: "लहसुन",
+    category: "Vegetable",
+    icon: "🧄",
+  },
   {
     id: "tomato",
     name: "Tomato",
@@ -177,11 +190,33 @@ export const CROPS: Crop[] = [
   },
      
   {
+     id: "pumpkin",
+     name: "Pumpkin",
+     nameHindi: "कद्दू",
+     category: "Vegetable",
+     icon: "🎃",
+  },
+  
+  {
     id: "bitter-gourd",
     name: "Bitter Gourd",
     nameHindi: "करेला",
     category: "Vegetable",
     icon: "🥒",
   },
-
+  
+  {
+    id: "little-gourd",
+    name: "Little Gourd",
+    nameHindi: "कुंदरू",
+    category: "Vegetable",
+    icon: "🥒",
+  },
+  {
+    id: "sponge-gourd",
+    name: "Sponge Gourd",
+    nameHindi: "तुरई (नेनुआ)",
+    category: "Vegetable",
+    icon: "🥒",
+  },
 ];

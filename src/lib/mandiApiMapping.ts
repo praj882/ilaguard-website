@@ -126,6 +126,19 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     ],
     districtName: "Patna",
   },
+  
+  // ------------------------------------------------------------
+  // Siwan
+  // ------------------------------------------------------------
+  {
+    mandiId: "maharjganj",
+    apiMarketNames: [
+      "Maharjganj",
+      "Maharjganj APMC",
+    ],
+    districtName: "Siwan",
+  },
+  
   // ------------------------------------------------------------
   // NALANDA
   // ------------------------------------------------------------
@@ -137,6 +150,27 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     ],
     districtName: "Nalanda",
   },
+  
+  // ------------------------------------------------------------
+  // Sheikhpura
+  // ------------------------------------------------------------
+  {
+    mandiId: "sheikhpura",
+    apiMarketNames: [
+      "Sheikhpura",
+      "Sheikhpura APMC",
+    ],
+    districtName: "Sheikhpura",
+  },
+  {
+    mandiId: "barbigha",
+    apiMarketNames: [
+      "Barbigha",
+      "Barbigha APMC",
+    ],
+    districtName: "Sheikhpura",
+  },
+  
   // ------------------------------------------------------------
   // JEHANABAD
   // ------------------------------------------------------------
@@ -265,6 +299,7 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
       "Daud Nagar",
       "Daud Nagar APMC",
       "Daudnagar",
+	  "Daunagar",
     ],
     districtName: "Aurangabad",
   },
@@ -407,6 +442,7 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     apiMarketNames: [
       "Jhanjharpur",
       "Jhanjharpur APMC",
+	  "Jahajharpur APMC",
     ],
     districtName: "Madhubani",
   },
@@ -439,6 +475,14 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     ],
     districtName: "Begusarai",
   },
+  {
+    mandiId: "balliah",
+    apiMarketNames: [
+      "Balliah",
+      "Balliah APMC",
+    ],
+    districtName: "Begusarai",
+  },
    // ------------------------------------------------------------
   // MUZAFFARPUR
   // ------------------------------------------------------------
@@ -448,6 +492,16 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     apiMarketNames: [
       "Muzaffarpur",
       "Muzaffarpur APMC",
+    ],
+    districtName: "Muzaffarpur",
+  },
+  
+  {
+    mandiId: "bhagwanpur",
+    apiMarketNames: [
+      "Bhagwanpur",
+      "Bhagwanpur APMC",
+	  "Bhagwanpur Mandi APMC",
     ],
     districtName: "Muzaffarpur",
   },
@@ -936,6 +990,18 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
       "Onion",
     ],
   },
+  
+  // ==========================================================
+  // Garlic
+  // ==========================================================
+
+  {
+    cropId: "garlic",
+
+    apiCommodityNames: [
+      "Garlic",
+    ],
+  },
 
 
   // ==========================================================
@@ -979,10 +1045,21 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
 
     apiCommodityNames: [
       "Bottle gourd",
-      "Bottle Gourd",
+      "Bottle-Gourd",
     ],
   },
+  
+  // ==========================================================
+  // Pumpkin / कद्दू
+  // ==========================================================
 
+  {
+    cropId: "pumpkin",
+
+    apiCommodityNames: [
+      "Pumpkin",
+    ],
+  },
 
   // ==========================================================
   // POINTED GOURD / PARVAL
@@ -997,6 +1074,60 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
       "Pointed Gourd(Parval)",
       "Pointed Gourd (Parval)",
       "Parval",
+    ],
+  },
+  
+  // ==========================================================
+  // Little GOURD / Kundru
+  // ==========================================================
+
+  {
+    cropId: "little-gourd",
+
+    apiCommodityNames: [
+      "Little gourd(Kundru)",
+      "Little gourd",
+      "Kundru",
+    ],
+  },
+  
+  // ==========================================================
+  // Cucumbar / Kheera
+  // ==========================================================
+
+  {
+    cropId: "little-gourd",
+
+    apiCommodityNames: [
+      "Cucumbar",
+      "Cucumbar(Kheera)",
+      "Kheera",
+    ],
+  },
+  
+  // ==========================================================
+  // Sponge Gourd / तुरई (नेनुआ)
+  // ==========================================================
+
+  {
+    cropId: "sponge-gourd",
+
+    apiCommodityNames: [
+      "Sponge Gourd",
+      "Sponge Gourd(तुरई)",
+      "Sponge Gourd(नेनुआ)",
+    ],
+  },
+  
+  // ==========================================================
+  // Carrot / गाजर
+  // ==========================================================
+
+  {
+    cropId: "carrot",
+
+    apiCommodityNames: [
+      "Carrot",
     ],
   },
 
