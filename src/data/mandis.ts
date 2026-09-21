@@ -88,7 +88,12 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Muzaffarpur",
   },
-
+  {
+    id: "bhagwanpur",
+    name: "Bhagwanpur Mandi",
+    stateName: "Bihar",
+    districtName: "Muzaffarpur",
+  },
   // ============================================================
   // DARBHANGA
   // ============================================================
@@ -170,7 +175,35 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Nalanda",
   },
+  
+  // ============================================================
+  // Siwan
+  // ============================================================
 
+  {
+    id: "maharjganj",
+    name: "Maharjganj",
+    stateName: "Bihar",
+    districtName: "Siwan",
+  },
+  
+  // ============================================================
+  // Sheikhpura
+  // ============================================================
+
+  {
+    id: "sheikhpura",
+    name: "Sheikhpura",
+    stateName: "Bihar",
+    districtName: "Sheikhpura",
+  },
+  
+  {
+    id: "barbigha",
+    name: "Barbigha",
+    stateName: "Bihar",
+    districtName: "Sheikhpura",
+  },
   // ============================================================
   // JEHANABAD
   // ============================================================
@@ -190,6 +223,12 @@ export const MANDIS: Mandi[] = [
   {
     id: "begusarai",
     name: "Begusarai Mandi",
+    stateName: "Bihar",
+    districtName: "Begusarai",
+  },
+  {
+    id: "balliah",
+    name: "Balliah Mandi",
     stateName: "Bihar",
     districtName: "Begusarai",
   },
@@ -482,7 +521,7 @@ export const MANDIS: Mandi[] = [
     districtName: "East Champaran",
   },
   {
-    id: "raxaul ",
+    id: "raxaul",
     name: "Raxaul  Mandi",
     stateName: "Bihar",
     districtName: "East Champaran",
