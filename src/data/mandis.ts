@@ -331,6 +331,12 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Saran",
   },
+  {
+    id: "sonpur",
+    name: "Sonpur APMC",
+    stateName: "Bihar",
+    districtName: "Saran",
+  },
   
   // ============================================================
   // BHAGALPUR

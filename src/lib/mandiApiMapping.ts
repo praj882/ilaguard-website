@@ -348,6 +348,7 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     apiMarketNames: [
       "Buxar",
       "Buxar APMC",
+	  "Buxur APMC",
     ],
     districtName: "Buxar",
   },
@@ -1145,6 +1146,7 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
     cropId: "sponge-gourd",
 
     apiCommodityNames: [
+	  "Sponge gourd"
       "Sponge Gourd",
       "Sponge Gourd(तुरई)",
       "Sponge Gourd(नेनुआ)",
