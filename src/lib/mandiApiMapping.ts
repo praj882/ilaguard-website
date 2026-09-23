@@ -1146,7 +1146,7 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
     cropId: "sponge-gourd",
 
     apiCommodityNames: [
-	  "Sponge gourd"
+	  "Sponge gourd",
       "Sponge Gourd",
       "Sponge Gourd(तुरई)",
       "Sponge Gourd(नेनुआ)",
