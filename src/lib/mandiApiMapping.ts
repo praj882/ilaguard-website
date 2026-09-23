@@ -159,6 +159,7 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     apiMarketNames: [
       "Sheikhpura",
       "Sheikhpura APMC",
+	  "Shekhpura APMC",
     ],
     districtName: "Sheikhpura",
   },
@@ -411,6 +412,19 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     "Chhapra",
     ],
   },
+  {
+    mandiId: "sonpur",
+    apiMarketNames: [
+      "Sonpur",
+      "Sonpur APMC",
+    ],
+    districtName: "Saran",
+       apiDistrictNames: [
+    "Saran",
+    "Chhapra",
+    ],
+  },
+
   // ------------------------------------------------------------
   // VAISHALI
   // ------------------------------------------------------------
@@ -473,7 +487,6 @@ export const MANDI_API_MAPPINGS: MandiApiMapping[] = [
     ],
     districtName: "Madhubani",
   },
-  
   {
     mandiId: "benipatti",
     apiMarketNames: [
@@ -1151,9 +1164,8 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
   },
   
   // ==========================================================
-  // Carrot / गाजर
+  // Wheat
   // ==========================================================
-
   {
     cropId: "wheat",
 
@@ -1161,5 +1173,4 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
       "Wheat",
     ],
   },
-
 ];
