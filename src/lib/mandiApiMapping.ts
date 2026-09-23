@@ -1125,14 +1125,14 @@ export const CROP_API_MAPPINGS: CropApiMapping[] = [
   },
   
   // ==========================================================
-  // Cucumbar / Kheera
+  // Cucumber / Kheera
   // ==========================================================
 
   {
-    cropId: "cucumbar",
+    cropId: "cucumber",
 
     apiCommodityNames: [
-      "Cucumbar",
+      "Cucumber",
       "Cucumbar(Kheera)",
       "Kheera",
     ],
