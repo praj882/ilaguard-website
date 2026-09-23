@@ -243,6 +243,12 @@ export const MANDIS: Mandi[] = [
     stateName: "Bihar",
     districtName: "Gaya",
   },
+  {
+    id: "tekari",
+    name: "Tekari APMC",
+    stateName: "Bihar",
+    districtName: "Gaya",
+  },
   // ============================================================
   // AURANGABAD
   // ============================================================
@@ -484,6 +490,12 @@ export const MANDIS: Mandi[] = [
   {
     id: "jainagar",
     name: "Jainagar",
+    stateName: "Bihar",
+    districtName: "Madhubani",
+  },
+  {
+    id: "benipatti",
+    name: "Benipatti",
     stateName: "Bihar",
     districtName: "Madhubani",
   },
