@@ -96,58 +96,22 @@ export default function Footer() {
                   Home
                 </Link>
               </li>
-
+              
               <li>
                 <Link
-                  href="/about"
+                  href="/crop-advisor"
                   className="hover:text-orange-400 transition-colors duration-300"
                 >
-                  About
+                  Crop Advisor
                 </Link>
               </li>
-
+              
               <li>
                 <Link
-                  href="/solutions"
+                  href="/products"
                   className="hover:text-orange-400 transition-colors duration-300"
                 >
-                  Solutions
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/services"
-                  className="hover:text-orange-400 transition-colors duration-300"
-                >
-                  Services
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/training"
-                  className="hover:text-orange-400 transition-colors duration-300"
-                >
-                  Training
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/blog"
-                  className="hover:text-orange-400 transition-colors duration-300"
-                >
-                  Blog
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/careers"
-                  className="hover:text-orange-400 transition-colors duration-300"
-                >
-                  Careers
+                  Products
                 </Link>
               </li>
 
@@ -159,7 +123,7 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-			  
+
               <li>
                 <Link
                   href="/coordinator/login"
