@@ -594,27 +594,6 @@ export default function Navbar() {
                   MOBILE CROP ADVISOR
               ================================================== */}
 
-              <button
-                type="button"
-                onClick={() =>
-                  setCropAdvisorOpen(
-                    !cropAdvisorOpen
-                  )
-                }
-                className="flex items-center justify-between py-3 text-left"
-              >
-                 Crop Advisor
-
-                <FaChevronDown
-                  className={`text-xs transition-transform ${
-                    cropAdvisorOpen
-                      ? "rotate-180"
-                      : ""
-                  }`}
-                />
-
-              </button>
-
               <Link
                 href="/crop-advisor"
                 onClick={closeMenus}
