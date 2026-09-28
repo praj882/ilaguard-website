@@ -8,7 +8,7 @@ import {
   set,
   update,
 } from "firebase/database";
-
+import { MANDIS } from "@/data/mandis";
 import { database } from "@/lib/firebase";
 
 // ============================================================
@@ -90,6 +90,11 @@ export type MandiPriceHistory =
   MandiPrice & {
     historyId: string;
   };
+export type StateCropMandiPrice = MandiPrice & {
+  mandiName: string;
+  stateName: string;
+  districtName: string;
+};
 
 // ============================================================
 // FIREBASE PATHS
@@ -276,7 +281,90 @@ export async function getCropMandiPrices(
       price.cropId === cropId
   );
 }
+// ============================================================
+// GET PRICES FOR STATE + CROP
+// ============================================================
+export async function getStateCropMandiPrices(
+  stateName: string,
+  cropId: string
+): Promise<StateCropMandiPrice[]> {
+  if (!stateName || !cropId) {
+    return [];
+  }
 
+  // ----------------------------------------------------------
+  // 1. Get all prices for the selected crop
+  // ----------------------------------------------------------
+
+  const cropPrices =
+    await getCropMandiPrices(cropId);
+
+  if (!cropPrices.length) {
+    return [];
+  }
+
+  // ----------------------------------------------------------
+  // 2. Create lookup of mandi information
+  // ----------------------------------------------------------
+
+  const mandiMap = new Map(
+    MANDIS.map((mandi) => [
+      mandi.id,
+      mandi,
+    ])
+  );
+
+  // ----------------------------------------------------------
+  // 3. Keep only mandis belonging to selected state
+  // ----------------------------------------------------------
+
+  const result: StateCropMandiPrice[] = [];
+
+  cropPrices.forEach((price) => {
+    const mandi = mandiMap.get(
+      price.mandiId
+    );
+
+    if (!mandi) {
+      return;
+    }
+
+    if (
+      mandi.stateName.toLowerCase() !==
+      stateName.toLowerCase()
+    ) {
+      return;
+    }
+
+    result.push({
+      ...price,
+      mandiName: mandi.name,
+      stateName: mandi.stateName,
+      districtName: mandi.districtName,
+    });
+  });
+
+  // ----------------------------------------------------------
+  // 4. Sort by district, then mandi
+  // ----------------------------------------------------------
+
+  result.sort((a, b) => {
+    const districtCompare =
+      a.districtName.localeCompare(
+        b.districtName
+      );
+
+    if (districtCompare !== 0) {
+      return districtCompare;
+    }
+
+    return a.mandiName.localeCompare(
+      b.mandiName
+    );
+  });
+
+  return result;
+}
 // ============================================================
 // SAVE MANDI PRICE
 // ============================================================
