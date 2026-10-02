@@ -308,6 +308,38 @@ export default function Navbar() {
                       </div>
 
                     </Link>
+					
+					{/* =================================================
+                        Government Agricultural Schemes 
+                    ================================================== */}
+
+                    <Link
+                      href="/crop-advisor/government-schemes"
+                      onClick={closeMenus}
+                      className="group rounded-xl p-4 transition hover:bg-green-50"
+                    >
+
+                      <div className="flex items-start gap-3">
+
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-2xl">
+                          🏛
+                        </div>
+
+                        <div>
+
+                          <h3 className="font-semibold text-gray-900 group-hover:text-green-700">
+                            सरकारी कृषि योजनाएँ देखें
+                          </h3>
+
+                          <p className="mt-1 text-sm text-gray-500">
+                            अपने राज्य की सरकारी कृषि योजनाएँ, सब्सिडी, पात्रता और आवेदन की आधिकारिक जानकारी देखें।
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
 
                   </div>
 
