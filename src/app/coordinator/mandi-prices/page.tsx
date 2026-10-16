@@ -1,5 +1,5 @@
 "use client";
-
+import AgmarknetJsonImport from "./AgmarknetJsonImport";
 import { useEffect, useMemo, useState } from "react";
 import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
@@ -1558,6 +1558,10 @@ export default function MandiPricesPage() {
               </div>
             </div>
           )}
+		  {/* ==================================================
+            AGMARKNET JSON IMPORT
+			================================================== */}
+			<AgmarknetJsonImport />
       </main>
     </div>
   );
