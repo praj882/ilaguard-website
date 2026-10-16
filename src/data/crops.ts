@@ -135,7 +135,7 @@ export const CROPS: Crop[] = [
   
   {
     id: "chilli",
-    name: "Chilli",
+    name: "Green Chilli",
     nameHindi: "मिर्च",
     category: "Vegetable",
     icon: "🌶️",
@@ -159,7 +159,7 @@ export const CROPS: Crop[] = [
   
   {
 	id: "cucumber",
-	name: "Cucumber",
+	name: "Cucumbar(Kheera)",
 	nameHindi: "खीरा",
 	category: "Vegetable",
 	icon: "🥒",
@@ -174,8 +174,8 @@ export const CROPS: Crop[] = [
   },
   
   {
-  id: "pointed-gourd",
-  name: "Pointed Gourd",
+  id: "pointedgourd",
+  name: "Pointed gourd(Parval)",
   nameHindi: "परवल",
   category: "Vegetable",
   icon: "🥒",
@@ -207,7 +207,7 @@ export const CROPS: Crop[] = [
   
   {
     id: "little-gourd",
-    name: "Little Gourd",
+    name: "Little gourd(Kundru)",
     nameHindi: "कुंदरू",
     category: "Vegetable",
     icon: "🥒",

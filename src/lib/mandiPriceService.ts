@@ -284,7 +284,7 @@ export async function getCropMandiPrices(
 // ============================================================
 // GET PRICES FOR STATE + CROP
 // ============================================================
-export async function getStateCropMandiPrices(
+/*export async function getStateCropMandiPrices(
   stateName: string,
   cropId: string
 ): Promise<StateCropMandiPrice[]> {
@@ -361,6 +361,64 @@ export async function getStateCropMandiPrices(
     return a.mandiName.localeCompare(
       b.mandiName
     );
+  });
+
+  return result;
+}*/
+export async function getStateCropMandiPrices(
+  stateName: string,
+  cropId: string
+): Promise<StateCropMandiPrice[]> {
+  if (!stateName || !cropId) return [];
+
+  const cropPrices = await getCropMandiPrices(cropId);
+  if (!cropPrices.length) return [];
+
+  const mandiMap = new Map(
+    MANDIS.map((mandi) => [mandi.id, mandi])
+  );
+
+  const normalize = (value?: string) =>
+    (value ?? "")
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, " ");
+
+  const result: StateCropMandiPrice[] = [];
+
+  for (const price of cropPrices) {
+    const mandi = mandiMap.get(price.mandiId);
+
+    // Prefer static mandi data when available;
+    // otherwise use metadata saved in Firebase.
+    const resolvedState = mandi?.stateName || price.apiState || "";
+    const resolvedDistrict =
+      mandi?.districtName || price.apiDistrict || "";
+    const resolvedMandiName =
+      mandi?.name || price.apiMarket || price.mandiId;
+
+    if (normalize(resolvedState) !== normalize(stateName)) {
+      continue;
+    }
+
+    result.push({
+      ...price,
+      mandiId: price.mandiId,
+      cropId: price.cropId,
+      mandiName: resolvedMandiName,
+      stateName: resolvedState,
+      districtName: resolvedDistrict,
+    });
+  }
+
+  result.sort((a, b) => {
+    const districtCompare = a.districtName.localeCompare(
+      b.districtName
+    );
+
+    if (districtCompare !== 0) return districtCompare;
+
+    return a.mandiName.localeCompare(b.mandiName);
   });
 
   return result;
