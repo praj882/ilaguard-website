@@ -76,7 +76,7 @@ function normalize(value: string): string {
 }
 
 function normalizeMarket(value: unknown): string {
-  return normalize(value)
+  return normalize(text(value))
     .replace(/\b(apmc|mandi|market yard|market)\b/g, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -136,9 +136,9 @@ const COMMODITY_ALIASES: Record<string, string> = {
   okra: "okra",
   brinjal: "brinjal",
   aubergine: "brinjal",
-  "Cucumbar Kheera": "Cucumber",
-  "Pointed gourd Parval": "pointed-gourd",
-  "Little gourd Kundru": "LittleGourd",
+  "cucumbar kheera": "Cucumber",
+  "pointed gourd parval": "pointedgourd",
+  "little gourd kundru": "LittleGourd",
   
 };
 
@@ -285,7 +285,7 @@ export function previewAgmarknetJson(json: unknown): AgmarknetPreview {
 
     let reason = "";
 
-    if (normalize(raw.state_name) !== "bihar") {
+    if (normalize(text(raw.state_name)) !== "bihar") {
       reason = "यह importer अभी केवल बिहार के लिए है।";
     } else if (!marketName || !districtName) {
       reason = "मंडी या जिले का नाम उपलब्ध नहीं है।";
